@@ -1,0 +1,32 @@
+package mini.minishop.repository;
+
+import jakarta.transaction.Transactional;
+import mini.minishop.domain.User;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+class UserRepositoryTest {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void testUser() {
+        User user = new User();
+        user.setName("user1");
+        user.setEmail("test@test.com");
+        user.setPassword("test");
+        user.setCreatedDate(LocalDateTime.now());
+
+        userRepository.save(user);
+    }
+}
