@@ -28,10 +28,11 @@ class OrderRepositoryTest {
     @Transactional
     @Rollback(false)
     void saveOrder() {
-        User user = new User();
-        user.setName("a");
-        user.setEmail("aaa@aaa.com");
-        user.setPassword("aaa");
+        User user = User.builder()
+                .name("a")
+                .email("aaa@aaa.com")
+                .password("aaa")
+                .build();
 
         User savedUser = userRepository.save(user);
 

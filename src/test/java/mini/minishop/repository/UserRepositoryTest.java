@@ -17,10 +17,11 @@ class UserRepositoryTest {
     @Transactional
     @Rollback(false)
     public void testUser() {
-        User user = new User();
-        user.setName("user1");
-        user.setEmail("test@test.com");
-        user.setPassword("test");
+        User user = User.builder()
+                .name("a")
+                .email("aaa@aaa.com")
+                .password("aaa")
+                .build();
 
         userRepository.save(user);
     }
