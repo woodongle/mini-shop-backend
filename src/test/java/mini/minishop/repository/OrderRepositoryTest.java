@@ -32,7 +32,6 @@ class OrderRepositoryTest {
         user.setName("a");
         user.setEmail("aaa@aaa.com");
         user.setPassword("aaa");
-        user.setCreatedDate(LocalDateTime.now());
 
         User savedUser = userRepository.save(user);
 
@@ -44,7 +43,6 @@ class OrderRepositoryTest {
 
         Order order = new Order();
         order.setStatus(OrderStatus.COMPLETED_ORDER);
-        order.setCreatedDate(LocalDateTime.now());
         order.setCanceledDate(LocalDateTime.now());
         order.setUser(savedUser);
         order.setDelivery(savedDelivery);

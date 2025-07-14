@@ -41,7 +41,6 @@ class OrderGoodsRepositoryTest {
         user.setName("a");
         user.setEmail("aaa@aaa.com");
         user.setPassword("aaa");
-        user.setCreatedDate(LocalDateTime.now());
 
         User savedUser = userRepository.save(user);
 
@@ -53,7 +52,6 @@ class OrderGoodsRepositoryTest {
 
         Order order = new Order();
         order.setStatus(OrderStatus.COMPLETED_ORDER);
-        order.setCreatedDate(LocalDateTime.now());
         order.setCanceledDate(LocalDateTime.now());
         order.setUser(savedUser);
         order.setDelivery(savedDelivery);
@@ -64,7 +62,6 @@ class OrderGoodsRepositoryTest {
         goods.setName("book");
         goods.setPrice(new BigDecimal(1000));
         goods.setInventoryQuantity(35);
-        goods.setCreatedDate(LocalDateTime.now());
         goods.setModifiedDate(LocalDateTime.now());
 
         Goods savedGoods = goodsRepository.save(goods);

@@ -24,7 +24,6 @@ class GoodsRepositoryTest {
         goods.setName("book");
         goods.setPrice(new BigDecimal(1000));
         goods.setInventoryQuantity(100);
-        goods.setCreatedDate(LocalDateTime.now());
         goods.setModifiedDate(LocalDateTime.now());
 
         Goods savedGoods = goodsRepository.save(goods);

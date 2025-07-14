@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class UserRepositoryTest {
 
@@ -25,7 +21,6 @@ class UserRepositoryTest {
         user.setName("user1");
         user.setEmail("test@test.com");
         user.setPassword("test");
-        user.setCreatedDate(LocalDateTime.now());
 
         userRepository.save(user);
     }
