@@ -20,7 +20,7 @@ import lombok.Setter;
 @Table(name = "orders")
 @Getter
 @Setter
-public class Order {
+public class Order extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -30,7 +30,6 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private LocalDateTime createdDate;
     private LocalDateTime canceledDate;
 
     @ManyToOne

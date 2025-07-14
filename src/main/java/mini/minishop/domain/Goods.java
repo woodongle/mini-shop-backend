@@ -2,17 +2,20 @@ package mini.minishop.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
 @Setter
-public class Goods {
+@EntityListeners(AutoCloseable.class)
+public class Goods extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -25,6 +28,7 @@ public class Goods {
     private BigDecimal price;
 
     private int inventoryQuantity;
-    private LocalDateTime createdDate;
+
+    @LastModifiedDate
     private LocalDateTime modifiedDate;
 }

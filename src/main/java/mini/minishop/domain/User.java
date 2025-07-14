@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Table(name = "users")
 @Getter
 @Setter
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -24,7 +23,6 @@ public class User {
 
     @Column(unique = true)
     private String email;
-    
+
     private String password;
-    private LocalDateTime createdDate;
 }
