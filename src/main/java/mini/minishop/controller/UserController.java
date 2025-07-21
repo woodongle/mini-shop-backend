@@ -5,6 +5,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.dto.user.CreateUserRequest;
 import mini.minishop.dto.user.FindUserResponse;
+import mini.minishop.error.UserErrorCode;
 import mini.minishop.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,6 @@ public class UserController {
         Optional<FindUserResponse> findUser = userService.findUser(userId);
 
         return findUser.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity<>(UserErrorCode.USER_NOT_FOUND.getStatus()));
     }
 }

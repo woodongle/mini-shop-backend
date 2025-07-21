@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
 import mini.minishop.dto.user.CreateUserRequest;
 import mini.minishop.dto.user.FindUserResponse;
+import mini.minishop.error.UserErrorCode;
 import mini.minishop.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class UserService {
     private void validateDuplicateEmail(User user) {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(u -> {
-                    throw new IllegalStateException("이미 존재하는 이메일입니다.");
+                    throw new IllegalStateException(UserErrorCode.ALREADY_EXISTS_EMAIL.getMessage());
                 });
     }
 
