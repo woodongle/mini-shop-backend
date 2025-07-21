@@ -27,7 +27,7 @@ public class UserController {
     public ResponseEntity<String> createUser(@Valid @RequestBody CreateUserRequest request) {
         try {
             Long userId = userService.join(request);
-            return new ResponseEntity<>("회원 가입 성공", HttpStatus.CREATED);
+            return new ResponseEntity<>("가입을 축하드립니다.", HttpStatus.CREATED);
         } catch (IllegalStateException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
