@@ -3,6 +3,7 @@ package mini.minishop.service;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
+import mini.minishop.domain.UserRole;
 import mini.minishop.dto.user.CreateUserRequest;
 import mini.minishop.dto.user.FindUserResponse;
 import mini.minishop.error.UserErrorCode;
@@ -27,6 +28,7 @@ public class UserService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(encryptedPassword)
+                .role(UserRole.USER)
                 .build();
 
         validateDuplicateEmail(user);
@@ -45,6 +47,10 @@ public class UserService {
     public Optional<FindUserResponse> findUser(Long userId) {
         return userRepository.findById(userId)
                 .map(FindUserResponse::new);
+    }
+
+    public Optional<User> findUser(String email) {
+        return userRepository.findByEmail(email);
     }
 
 }
