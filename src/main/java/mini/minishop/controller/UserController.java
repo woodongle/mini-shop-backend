@@ -92,7 +92,7 @@ public class UserController {
 
         User findUser = userService.findUser(email)
                 .orElseThrow(
-                        () -> new IllegalArgumentException(UserErrorCode.ALREADY_EXISTS_EMAIL.getMessage() + email));
+                        () -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage() + email));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 new org.springframework.security.core.userdetails.User(findUser.getEmail(), "",
