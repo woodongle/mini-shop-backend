@@ -7,6 +7,7 @@ import mini.minishop.error.UserErrorCode;
 import mini.minishop.repository.RefreshTokenRepository;
 import mini.minishop.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +32,9 @@ public class RefreshTokenService {
     public RefreshToken findByToken(String token) {
         return refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("토큰이 존재하지 않습니다."));
+    }
+
+    public void logout(User user) {
+        refreshTokenRepository.deleteByUserId(user.getId());
     }
 }

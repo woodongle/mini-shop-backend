@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,6 +69,16 @@ public class UserController {
         refreshTokenService.saveOrUpdate(user.getId(), refreshTokenValue);
 
         return ResponseEntity.ok(new TokenDto(accessToken, refreshTokenValue));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findUser(userDetails.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage()));
+
+        refreshTokenService.logout(user);
+
+        return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 
     @PostMapping("/refresh")
