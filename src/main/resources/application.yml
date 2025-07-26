@@ -18,6 +18,7 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+  org.springframework.security: debug
 
 jwt:
   secret: ${JWT_SECRET_KEY}
