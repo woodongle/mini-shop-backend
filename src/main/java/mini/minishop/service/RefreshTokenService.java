@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -26,6 +27,7 @@ public class RefreshTokenService {
                 );
     }
 
+    @Transactional(readOnly = true)
     public RefreshToken findByToken(String token) {
         return refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("토큰이 존재하지 않습니다."));
