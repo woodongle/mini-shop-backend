@@ -1,0 +1,4 @@
+jwt:
+  secret: "2ba65fc39ccac4f4eef7176ab3934fbe433e3484c0c7c30c188f24d14ef2a64f829bc7e3083c5b217fbff6ef1e1bca3e9efaa29e551f0a94d91d89bea694373b"
+  expiration-ms: 3600000
+  refresh-expiration-ms: 604800000
