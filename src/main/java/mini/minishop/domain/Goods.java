@@ -41,9 +41,10 @@ public class Goods extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public Goods(String name, BigDecimal price, int inventoryQuantity) {
+    public Goods(String name, BigDecimal price, int inventoryQuantity, User user) {
         this.name = name;
         this.price = price;
         this.inventoryQuantity = inventoryQuantity;
+        this.user = user;
     }
 }
