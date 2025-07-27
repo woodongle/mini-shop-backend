@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/refresh", "/api/users/signup", "/api/users/login",
+                        .requestMatchers("/api/v1/users/refresh", "/api/v1/users/signup", "/api/v1/users/login",
                                 "/h2-console/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest()
