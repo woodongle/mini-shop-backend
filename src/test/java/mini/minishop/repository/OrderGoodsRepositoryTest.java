@@ -59,11 +59,11 @@ class OrderGoodsRepositoryTest {
 
         Order savedOrder = orderRepository.save(order);
 
-        Goods goods = new Goods();
-        goods.setName("book");
-        goods.setPrice(new BigDecimal(1000));
-        goods.setInventoryQuantity(35);
-        goods.setModifiedDate(LocalDateTime.now());
+        Goods goods = Goods.builder()
+                .name("book")
+                .price(new BigDecimal(1000))
+                .inventoryQuantity(100)
+                .build();
 
         Goods savedGoods = goodsRepository.save(goods);
 
