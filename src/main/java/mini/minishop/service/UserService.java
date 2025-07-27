@@ -21,7 +21,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Long join(CreateUserRequest request) {
+    public Long createUser(CreateUserRequest request) {
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = User.builder()
