@@ -7,13 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AutoCloseable.class)
 public class Goods extends BaseTimeEntity {
 
@@ -31,4 +33,11 @@ public class Goods extends BaseTimeEntity {
 
     @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @Builder
+    public Goods(String name, BigDecimal price, int inventoryQuantity) {
+        this.name = name;
+        this.price = price;
+        this.inventoryQuantity = inventoryQuantity;
+    }
 }
