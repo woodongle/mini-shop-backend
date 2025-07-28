@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +42,13 @@ public class GoodsController {
     @GetMapping
     public ResponseEntity<List<FindGoodsResponse>> findGoods() {
         List<FindGoodsResponse> goods = goodsService.findGoods();
+
+        return ResponseEntity.ok(goods);
+    }
+
+    @GetMapping("/{goodsId}")
+    public ResponseEntity<FindGoodsResponse> findGoods(@PathVariable Long goodsId) {
+        FindGoodsResponse goods = goodsService.findGoods(goodsId);
 
         return ResponseEntity.ok(goods);
     }
