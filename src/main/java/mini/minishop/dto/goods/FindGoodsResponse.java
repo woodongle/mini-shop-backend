@@ -9,17 +9,20 @@ import mini.minishop.domain.Goods;
 @Getter
 @Setter
 public class FindGoodsResponse {
+    private Long id;
     private String name;
     private BigDecimal price;
     private int inventoryQuantity;
     private LocalDateTime modifiedDate;
 
     public static FindGoodsResponse of(Goods goods) {
-        return new FindGoodsResponse(goods.getName(), goods.getPrice(), goods.getInventoryQuantity(),
+        return new FindGoodsResponse(goods.getId(), goods.getName(), goods.getPrice(), goods.getInventoryQuantity(),
                 goods.getModifiedDate());
     }
 
-    private FindGoodsResponse(String name, BigDecimal price, int inventoryQuantity, LocalDateTime modifiedDate) {
+    private FindGoodsResponse(Long id, String name, BigDecimal price, int inventoryQuantity,
+                              LocalDateTime modifiedDate) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.inventoryQuantity = inventoryQuantity;
