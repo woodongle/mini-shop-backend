@@ -46,7 +46,7 @@ public class UserService {
 
     public Optional<FindUserResponse> findUser(Long userId) {
         return userRepository.findById(userId)
-                .map(FindUserResponse::new);
+                .map(FindUserResponse::of);
     }
 
     public Optional<User> findUser(String email) {
