@@ -35,8 +35,16 @@ public class DataInitializerConfig {
                     .role(UserRole.USER)
                     .build();
 
+            User user3 = User.builder()
+                    .name("test3")
+                    .email("test3@test.com")
+                    .password(passwordEncoder.encode("test3"))
+                    .role(UserRole.USER)
+                    .build();
+
             userRepository.save(user1);
             userRepository.save(user2);
+            userRepository.save(user3);
         };
     }
 
@@ -49,6 +57,8 @@ public class DataInitializerConfig {
                     .orElseThrow(() -> new IllegalStateException("초기화 데이터에 user1이 존재하지 않습니다."));
             User user2 = userRepository.findByEmail("test2@test.com")
                     .orElseThrow(() -> new IllegalStateException("초기화 데이터에 user2가 존재하지 않습니다."));
+            User user3 = userRepository.findByEmail("test3@test.com")
+                    .orElseThrow(() -> new IllegalStateException("초기화 데이터에 user3가 존재하지 않습니다."));
 
             Goods goods1 = Goods.builder()
                     .user(user1)
@@ -58,14 +68,46 @@ public class DataInitializerConfig {
                     .build();
 
             Goods goods2 = Goods.builder()
-                    .user(user2)
+                    .user(user1)
                     .name("goods2")
                     .price(new BigDecimal("2000.00"))
                     .inventoryQuantity(200)
                     .build();
 
+            Goods goods3 = Goods.builder()
+                    .user(user2)
+                    .name("goods3")
+                    .price(new BigDecimal("3000.00"))
+                    .inventoryQuantity(300)
+                    .build();
+
+            Goods goods4 = Goods.builder()
+                    .user(user2)
+                    .name("goods4")
+                    .price(new BigDecimal("4000.00"))
+                    .inventoryQuantity(400)
+                    .build();
+
+            Goods goods5 = Goods.builder()
+                    .user(user3)
+                    .name("goods5")
+                    .price(new BigDecimal("5000.00"))
+                    .inventoryQuantity(500)
+                    .build();
+
+            Goods goods6 = Goods.builder()
+                    .user(user3)
+                    .name("goods6")
+                    .price(new BigDecimal("6000.00"))
+                    .inventoryQuantity(600)
+                    .build();
+
             goodsRepository.save(goods1);
             goodsRepository.save(goods2);
+            goodsRepository.save(goods3);
+            goodsRepository.save(goods4);
+            goodsRepository.save(goods5);
+            goodsRepository.save(goods6);
         };
     }
 }
