@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody LoginRequest LoginRequest) {
+    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequest LoginRequest) {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(
                 new UsernamePasswordAuthenticationToken(LoginRequest.getEmail(), LoginRequest.getPassword())
         );
