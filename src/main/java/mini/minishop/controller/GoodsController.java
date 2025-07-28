@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
 import mini.minishop.dto.goods.CreateGoodsRequest;
 import mini.minishop.dto.goods.FindGoodsResponse;
-import mini.minishop.error.UserErrorCode;
 import mini.minishop.service.GoodsService;
 import mini.minishop.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -31,9 +30,7 @@ public class GoodsController {
     @PostMapping
     public ResponseEntity<String> createGoods(@RequestBody @Valid CreateGoodsRequest request,
                                               @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findUser(userDetails.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage()));
-
+        User user = userService.findUser(userDetails.getUsername());
         Long goodsId = goodsService.createGoods(request, user);
 
         return new ResponseEntity<>("상품 등록이 완료되었습니다.", HttpStatus.CREATED);

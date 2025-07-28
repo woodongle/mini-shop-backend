@@ -73,9 +73,7 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findUser(userDetails.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage()));
-
+        User user = userService.findUser(userDetails.getUsername());
         refreshTokenService.logout(user);
 
         return ResponseEntity.ok("로그아웃 되었습니다.");
@@ -90,9 +88,7 @@ public class UserController {
 
         String email = jwtTokenProvider.getEmailFromToken(refreshToken.getToken());
 
-        User findUser = userService.findUser(email)
-                .orElseThrow(
-                        () -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage() + email));
+        User findUser = userService.findUser(email);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 new org.springframework.security.core.userdetails.User(findUser.getEmail(), "",

@@ -49,8 +49,10 @@ public class UserService {
                 .map(FindUserResponse::of);
     }
 
-    public Optional<User> findUser(String email) {
-        return userRepository.findByEmail(email);
+    public User findUser(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+
+        return findUser.orElseThrow(() -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage()));
     }
 
 }
