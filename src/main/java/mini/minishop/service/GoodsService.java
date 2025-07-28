@@ -49,4 +49,9 @@ public class GoodsService {
 
         return FindGoodsResponse.of(goods);
     }
+
+    @Transactional
+    public List<FindGoodsResponse> searchGoodsByName(String name) {
+        return goodsRepository.findByNameContaining(name);
+    }
 }

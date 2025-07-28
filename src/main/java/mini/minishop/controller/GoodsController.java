@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -48,5 +49,13 @@ public class GoodsController {
         FindGoodsResponse goods = goodsService.findGoods(goodsId);
 
         return ResponseEntity.ok(goods);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<FindGoodsResponse>> searchGoodsByName(@RequestParam(name = "name") String name) {
+        List<FindGoodsResponse> findGoods = goodsService.searchGoodsByName(name);
+        
+        return ResponseEntity.ok(findGoods);
+
     }
 }
