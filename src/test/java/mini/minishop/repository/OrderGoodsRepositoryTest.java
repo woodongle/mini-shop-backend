@@ -68,10 +68,9 @@ class OrderGoodsRepositoryTest {
         Goods savedGoods = goodsRepository.save(goods);
 
         OrderGoods orderGoods = OrderGoods.builder()
-                .quantity(35)
-                .paymentAmount(new BigDecimal("35000.00"))
                 .order(savedOrder)
                 .goods(savedGoods)
+                .quantity(35)
                 .build();
 
         orderGoodsRepository.save(orderGoods);
