@@ -48,4 +48,12 @@ public class Goods extends BaseTimeEntity {
         this.inventoryQuantity = inventoryQuantity;
         this.user = user;
     }
+
+    public void deductInventoryQuantity(int quantity) {
+        if (inventoryQuantity < quantity) {
+            throw new IllegalArgumentException("재고가 부족합니다. 현재 재고: [" + inventoryQuantity + "]");
+        }
+
+        inventoryQuantity -= quantity;
+    }
 }
