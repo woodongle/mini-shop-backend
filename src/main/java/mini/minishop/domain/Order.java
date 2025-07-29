@@ -14,13 +14,12 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name = "orders")
 @Getter
-@Setter
 public class Order extends BaseTimeEntity {
 
     @Id
@@ -43,4 +42,11 @@ public class Order extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "order")
     private List<OrderGoods> orderGoods = new ArrayList<>();
+
+    @Builder
+    public Order(OrderStatus status, User user, Delivery delivery) {
+        this.status = status;
+        this.user = user;
+        this.delivery = delivery;
+    }
 }
