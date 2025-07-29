@@ -43,6 +43,8 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
+    // 하나의 주문에 여러 가지 상품이 있을 수 있다고 정의했지만,
+    // 하나의 주문에 하나의 상품만 있어야 한다고 변경해야 할 것 같음.
     @OneToMany(mappedBy = "order")
     private List<OrderGoods> orderGoods = new ArrayList<>();
 
