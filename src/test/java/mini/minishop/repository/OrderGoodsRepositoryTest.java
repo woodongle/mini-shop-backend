@@ -67,11 +67,12 @@ class OrderGoodsRepositoryTest {
 
         Goods savedGoods = goodsRepository.save(goods);
 
-        OrderGoods orderGoods = new OrderGoods();
-        orderGoods.setQuantity(35);
-        orderGoods.setPaymentAmount(new BigDecimal(35000));
-        orderGoods.setOrder(savedOrder);
-        orderGoods.setGoods(savedGoods);
+        OrderGoods orderGoods = OrderGoods.builder()
+                .quantity(35)
+                .paymentAmount(new BigDecimal("35000.00"))
+                .order(savedOrder)
+                .goods(savedGoods)
+                .build();
 
         orderGoodsRepository.save(orderGoods);
     }
