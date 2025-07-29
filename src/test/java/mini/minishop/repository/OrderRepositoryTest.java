@@ -1,7 +1,6 @@
 package mini.minishop.repository;
 
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
 import mini.minishop.domain.Delivery;
 import mini.minishop.domain.DeliveryStatus;
 import mini.minishop.domain.Order;
@@ -43,11 +42,11 @@ class OrderRepositoryTest {
 
         Delivery savedDelivery = deliveryRepository.save(delivery);
 
-        Order order = new Order();
-        order.setStatus(OrderStatus.COMPLETED_ORDER);
-        order.setCanceledDate(LocalDateTime.now());
-        order.setUser(savedUser);
-        order.setDelivery(savedDelivery);
+        Order order = Order.builder()
+                .status(OrderStatus.COMPLETED_ORDER)
+                .user(savedUser)
+                .delivery(savedDelivery)
+                .build();
 
         orderRepository.save(order);
     }
