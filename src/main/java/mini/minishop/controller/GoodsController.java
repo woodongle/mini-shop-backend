@@ -1,11 +1,14 @@
 package mini.minishop.controller;
 
 import jakarta.validation.Valid;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
 import mini.minishop.dto.goods.CreateGoodsRequest;
 import mini.minishop.dto.goods.FindGoodsResponse;
+import mini.minishop.dto.goods.UpdateGoodsRequest;
+import mini.minishop.dto.goods.UpdateGoodsResponse;
 import mini.minishop.service.GoodsService;
 import mini.minishop.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,8 +58,21 @@ public class GoodsController {
     @GetMapping("/search")
     public ResponseEntity<List<FindGoodsResponse>> searchGoodsByName(@RequestParam(name = "name") String name) {
         List<FindGoodsResponse> findGoods = goodsService.searchGoodsByName(name);
-        
-        return ResponseEntity.ok(findGoods);
 
+        return ResponseEntity.ok(findGoods);
+    }
+
+    @PatchMapping("/{goodsId}")
+    public ResponseEntity<UpdateGoodsResponse> updateGoods(@PathVariable Long goodsId,
+                                                           @RequestBody UpdateGoodsRequest request,
+                                                           @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            User user = userService.findUser(userDetails.getUsername());
+            UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request);
+
+            return ResponseEntity.ok(response);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(403).build();
+        }
     }
 }

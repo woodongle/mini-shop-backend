@@ -56,4 +56,11 @@ public class Goods extends BaseTimeEntity {
 
         inventoryQuantity -= quantity;
     }
+
+    public void update(String name, BigDecimal price, int inventoryQuantity) {
+        this.name = name;
+        this.price = price;
+        this.inventoryQuantity = inventoryQuantity;
+        this.modifiedDate = LocalDateTime.now();
+    }
 }
