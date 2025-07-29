@@ -34,10 +34,14 @@ public class OrderGoods {
     private Goods goods;
 
     @Builder
-    public OrderGoods(int quantity, BigDecimal paymentAmount, Order order, Goods goods) {
-        this.quantity = quantity;
-        this.paymentAmount = paymentAmount;
+    public OrderGoods(Order order, Goods goods, int quantity) {
         this.order = order;
         this.goods = goods;
+        this.quantity = quantity;
+        this.paymentAmount = calculatePaymentAmount();
+    }
+
+    private BigDecimal calculatePaymentAmount() {
+        return goods.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
 }
