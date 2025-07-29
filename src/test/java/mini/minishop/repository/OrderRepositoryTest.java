@@ -36,9 +36,10 @@ class OrderRepositoryTest {
 
         User savedUser = userRepository.save(user);
 
-        Delivery delivery = new Delivery();
-        delivery.setStatus(DeliveryStatus.BEFORE_DELIVERY);
-        delivery.setAddress("aaa");
+        Delivery delivery = Delivery.builder()
+                .status(DeliveryStatus.BEFORE_DELIVERY)
+                .address("aaa")
+                .build();
 
         Delivery savedDelivery = deliveryRepository.save(delivery);
 

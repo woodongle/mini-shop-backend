@@ -19,9 +19,10 @@ class DeliveryRepositoryTest {
     @Transactional
     @Rollback(false)
     void saveDelivery() {
-        Delivery delivery = new Delivery();
-        delivery.setStatus(DeliveryStatus.BEFORE_DELIVERY);
-        delivery.setAddress("서울");
+        Delivery delivery = Delivery.builder()
+                .status(DeliveryStatus.BEFORE_DELIVERY)
+                .address("서울")
+                .build();
 
         Delivery savedDelivery = deliveryRepository.save(delivery);
 
