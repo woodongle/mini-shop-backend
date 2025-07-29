@@ -1,5 +1,6 @@
 package mini.minishop.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.Delivery;
 import mini.minishop.domain.DeliveryStatus;
@@ -9,6 +10,7 @@ import mini.minishop.domain.OrderGoods;
 import mini.minishop.domain.OrderStatus;
 import mini.minishop.domain.User;
 import mini.minishop.dto.order.CreateOrderRequest;
+import mini.minishop.dto.order.FindOrderHistoryResponse;
 import mini.minishop.repository.DeliveryRepository;
 import mini.minishop.repository.GoodsRepository;
 import mini.minishop.repository.OrderGoodsRepository;
@@ -52,5 +54,13 @@ public class OrderService {
         orderGoodsRepository.save(orderGoods);
 
         return order.getId();
+    }
+
+    public List<FindOrderHistoryResponse> findOrderHistory(Long userId) {
+        List<Order> orders = orderRepository.findOrderHistoryByUserId(userId);
+
+        return orders.stream()
+                .map(FindOrderHistoryResponse::new)
+                .toList();
     }
 }

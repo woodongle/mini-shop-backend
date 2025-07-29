@@ -1,14 +1,17 @@
 package mini.minishop.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
 import mini.minishop.dto.order.CreateOrderRequest;
+import mini.minishop.dto.order.FindOrderHistoryResponse;
 import mini.minishop.service.OrderService;
 import mini.minishop.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,5 +35,12 @@ public class OrderController {
         orderService.createOrder(request, user, goodsId);
 
         return ResponseEntity.ok("상품 주문이 완료되었습니다.");
+    }
+
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<FindOrderHistoryResponse>> findOrderHistory(@PathVariable Long userId) {
+        List<FindOrderHistoryResponse> orderHistory = orderService.findOrderHistory(userId);
+
+        return ResponseEntity.ok(orderHistory);
     }
 }
