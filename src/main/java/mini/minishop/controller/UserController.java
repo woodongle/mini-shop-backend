@@ -1,7 +1,6 @@
 package mini.minishop.controller;
 
 import jakarta.validation.Valid;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.config.JwtTokenProvider;
 import mini.minishop.domain.RefreshToken;
@@ -11,7 +10,6 @@ import mini.minishop.dto.user.FindUserResponse;
 import mini.minishop.dto.user.LoginRequest;
 import mini.minishop.dto.user.TokenDto;
 import mini.minishop.dto.user.TokenRefreshRequest;
-import mini.minishop.exception.user.UserErrorCode;
 import mini.minishop.service.RefreshTokenService;
 import mini.minishop.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -47,10 +45,9 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<FindUserResponse> findUser(@PathVariable Long userId) {
-        Optional<FindUserResponse> findUser = userService.findUser(userId);
+        FindUserResponse findUser = userService.findUser(userId);
 
-        return findUser.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(UserErrorCode.USER_NOT_FOUND.getStatus()));
+        return ResponseEntity.ok(findUser);
     }
 
     @PostMapping("/login")

@@ -45,9 +45,11 @@ public class UserService {
                 });
     }
 
-    public Optional<FindUserResponse> findUser(Long userId) {
-        return userRepository.findById(userId)
-                .map(FindUserResponse::of);
+    public FindUserResponse findUser(Long userId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));
+
+        return FindUserResponse.of(findUser);
     }
 
     public User findUser(String email) {
