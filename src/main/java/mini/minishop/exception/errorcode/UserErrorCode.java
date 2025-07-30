@@ -1,4 +1,5 @@
-package mini.minishop.exception.error;
+package mini.minishop.exception.errorcode;
+
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,7 @@
 package mini.minishop.service;
 
 import lombok.RequiredArgsConstructor;
-import mini.minishop.exception.error.UserErrorCode;
+import mini.minishop.exception.errorcode.UserErrorCode;
 import mini.minishop.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
