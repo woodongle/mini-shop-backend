@@ -6,7 +6,7 @@ import mini.minishop.domain.User;
 import mini.minishop.domain.UserRole;
 import mini.minishop.dto.user.CreateUserRequest;
 import mini.minishop.dto.user.FindUserResponse;
-import mini.minishop.exception.errorcode.UserErrorCode;
+import mini.minishop.exception.user.UserErrorCode;
 import mini.minishop.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

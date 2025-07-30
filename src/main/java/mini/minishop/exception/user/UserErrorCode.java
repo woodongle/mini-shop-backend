@@ -1,4 +1,4 @@
-package mini.minishop.exception.errorcode;
+package mini.minishop.exception.user;
 
 
 import lombok.Getter;

@@ -10,7 +10,7 @@ import mini.minishop.dto.goods.CreateGoodsRequest;
 import mini.minishop.dto.goods.FindGoodsResponse;
 import mini.minishop.dto.goods.UpdateGoodsRequest;
 import mini.minishop.dto.goods.UpdateGoodsResponse;
-import mini.minishop.exception.errorcode.GoodsErrorCode;
+import mini.minishop.exception.goods.GoodsErrorCode;
 import mini.minishop.repository.GoodsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
