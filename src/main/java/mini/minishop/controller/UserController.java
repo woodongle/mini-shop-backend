@@ -11,7 +11,7 @@ import mini.minishop.dto.user.FindUserResponse;
 import mini.minishop.dto.user.LoginRequest;
 import mini.minishop.dto.user.TokenDto;
 import mini.minishop.dto.user.TokenRefreshRequest;
-import mini.minishop.error.UserErrorCode;
+import mini.minishop.exception.error.UserErrorCode;
 import mini.minishop.service.RefreshTokenService;
 import mini.minishop.service.UserService;
 import org.springframework.http.HttpStatus;

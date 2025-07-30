@@ -3,7 +3,7 @@ package mini.minishop.service;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.RefreshToken;
 import mini.minishop.domain.User;
-import mini.minishop.error.UserErrorCode;
+import mini.minishop.exception.error.UserErrorCode;
 import mini.minishop.repository.RefreshTokenRepository;
 import mini.minishop.repository.UserRepository;
 import org.springframework.stereotype.Service;
