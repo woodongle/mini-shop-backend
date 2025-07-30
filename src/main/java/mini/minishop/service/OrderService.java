@@ -1,5 +1,6 @@
 package mini.minishop.service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.Delivery;
@@ -9,6 +10,7 @@ import mini.minishop.domain.Order;
 import mini.minishop.domain.OrderGoods;
 import mini.minishop.domain.OrderStatus;
 import mini.minishop.domain.User;
+import mini.minishop.dto.order.CancelOrderResponse;
 import mini.minishop.dto.order.CreateOrderRequest;
 import mini.minishop.dto.order.FindOrderHistoryResponse;
 import mini.minishop.repository.DeliveryRepository;
@@ -62,5 +64,21 @@ public class OrderService {
         return orders.stream()
                 .map(FindOrderHistoryResponse::new)
                 .toList();
+    }
+
+    @Transactional
+    public CancelOrderResponse cancelOrder(Long orderId, Long userId) throws AccessDeniedException {
+        Order findOrder = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+
+        if (!userId.equals(findOrder.getUser().getId())) {
+            throw new AccessDeniedException("주문을 취소할 권한이 없습니다.");
+        }
+
+        findOrder.getOrderGoods()
+                .forEach(og -> og.getGoods().addInventoryQuantity(og.getQuantity()));
+        findOrder.cancel();
+
+        return new CancelOrderResponse(findOrder);
     }
 }

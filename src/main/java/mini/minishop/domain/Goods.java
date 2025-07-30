@@ -63,4 +63,8 @@ public class Goods extends BaseTimeEntity {
         this.inventoryQuantity = inventoryQuantity;
         this.modifiedDate = LocalDateTime.now();
     }
+
+    public void addInventoryQuantity(int quantity) {
+        inventoryQuantity += quantity;
+    }
 }

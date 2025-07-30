@@ -54,4 +54,13 @@ public class Order extends BaseTimeEntity {
         this.user = user;
         this.delivery = delivery;
     }
+
+    public void cancel() {
+        if (delivery.getStatus() != DeliveryStatus.BEFORE_DELIVERY) {
+            throw new IllegalStateException("배송이 진행 중이거나, 이미 배송 완료된 상품은 취소가 불가능합니다.");
+        }
+
+        this.status = OrderStatus.CANCELED_ORDER;
+        this.canceledDate = LocalDateTime.now();
+    }
 }

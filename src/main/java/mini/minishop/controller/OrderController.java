@@ -1,9 +1,11 @@
 package mini.minishop.controller;
 
 import jakarta.validation.Valid;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
+import mini.minishop.dto.order.CancelOrderResponse;
 import mini.minishop.dto.order.CreateOrderRequest;
 import mini.minishop.dto.order.FindOrderHistoryResponse;
 import mini.minishop.service.OrderService;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,5 +45,19 @@ public class OrderController {
         List<FindOrderHistoryResponse> orderHistory = orderService.findOrderHistory(userId);
 
         return ResponseEntity.ok(orderHistory);
+    }
+
+    @PatchMapping("/{orderId}/cancel")
+    public ResponseEntity<CancelOrderResponse> cancelOrder(@PathVariable Long orderId,
+                                                           @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            User user = userService.findUser(userDetails.getUsername());
+            CancelOrderResponse response = orderService.cancelOrder(orderId, user.getId());
+            return ResponseEntity.ok(response);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(403).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).build();
+        }
     }
 }
