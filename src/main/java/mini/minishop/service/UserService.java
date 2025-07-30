@@ -6,6 +6,7 @@ import mini.minishop.domain.User;
 import mini.minishop.domain.UserRole;
 import mini.minishop.dto.user.CreateUserRequest;
 import mini.minishop.dto.user.FindUserResponse;
+import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.user.UserErrorCode;
 import mini.minishop.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +41,7 @@ public class UserService {
     private void validateDuplicateEmail(User user) {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(u -> {
-                    throw new IllegalStateException(UserErrorCode.ALREADY_EXISTS_EMAIL.getMessage());
+                    throw new BusinessException(UserErrorCode.ALREADY_EXISTS_EMAIL);
                 });
     }
 
@@ -52,7 +53,7 @@ public class UserService {
     public User findUser(String email) {
         Optional<User> findUser = userRepository.findByEmail(email);
 
-        return findUser.orElseThrow(() -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage()));
+        return findUser.orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));
     }
 
 }

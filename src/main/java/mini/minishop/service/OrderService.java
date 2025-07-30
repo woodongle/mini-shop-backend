@@ -1,6 +1,5 @@
 package mini.minishop.service;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.Delivery;
@@ -13,6 +12,9 @@ import mini.minishop.domain.User;
 import mini.minishop.dto.order.CancelOrderResponse;
 import mini.minishop.dto.order.CreateOrderRequest;
 import mini.minishop.dto.order.FindOrderHistoryResponse;
+import mini.minishop.exception.BusinessException;
+import mini.minishop.exception.goods.GoodsErrorCode;
+import mini.minishop.exception.order.OrderErrorCode;
 import mini.minishop.repository.DeliveryRepository;
 import mini.minishop.repository.GoodsRepository;
 import mini.minishop.repository.OrderGoodsRepository;
@@ -46,7 +48,7 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
 
         Goods findGoods = goodsRepository.findById(goodsId)
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 상품입니다."));
+                .orElseThrow(() -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND));
 
         OrderGoods orderGoods = OrderGoods.builder()
                 .order(savedOrder)
@@ -67,12 +69,12 @@ public class OrderService {
     }
 
     @Transactional
-    public CancelOrderResponse cancelOrder(Long orderId, Long userId) throws AccessDeniedException {
+    public CancelOrderResponse cancelOrder(Long orderId, Long userId) {
         Order findOrder = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+                .orElseThrow(() -> new BusinessException(OrderErrorCode.ORDER_NOT_FOUND));
 
         if (!userId.equals(findOrder.getUser().getId())) {
-            throw new AccessDeniedException("주문을 취소할 권한이 없습니다.");
+            throw new BusinessException(OrderErrorCode.NO_PERMISSION_MODIFY_ORDER);
         }
 
         findOrder.getOrderGoods()

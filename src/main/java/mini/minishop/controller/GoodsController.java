@@ -1,7 +1,6 @@
 package mini.minishop.controller;
 
 import jakarta.validation.Valid;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
@@ -66,13 +65,9 @@ public class GoodsController {
     public ResponseEntity<UpdateGoodsResponse> updateGoods(@PathVariable Long goodsId,
                                                            @RequestBody UpdateGoodsRequest request,
                                                            @AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            User user = userService.findUser(userDetails.getUsername());
-            UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request);
+        User user = userService.findUser(userDetails.getUsername());
+        UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request);
 
-            return ResponseEntity.ok(response);
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(403).build();
-        }
+        return ResponseEntity.ok(response);
     }
 }

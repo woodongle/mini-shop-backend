@@ -40,12 +40,9 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> createUser(@Valid @RequestBody CreateUserRequest request) {
-        try {
-            Long userId = userService.createUser(request);
-            return new ResponseEntity<>("가입을 축하드립니다.", HttpStatus.CREATED);
-        } catch (IllegalStateException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
+        Long userId = userService.createUser(request);
+
+        return new ResponseEntity<>("가입을 축하드립니다.", HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")

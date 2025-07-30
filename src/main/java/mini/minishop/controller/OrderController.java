@@ -1,7 +1,6 @@
 package mini.minishop.controller;
 
 import jakarta.validation.Valid;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.User;
@@ -50,14 +49,9 @@ public class OrderController {
     @PatchMapping("/{orderId}/cancel")
     public ResponseEntity<CancelOrderResponse> cancelOrder(@PathVariable Long orderId,
                                                            @AuthenticationPrincipal UserDetails userDetails) {
-        try {
-            User user = userService.findUser(userDetails.getUsername());
-            CancelOrderResponse response = orderService.cancelOrder(orderId, user.getId());
-            return ResponseEntity.ok(response);
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(403).build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).build();
-        }
+        User user = userService.findUser(userDetails.getUsername());
+        CancelOrderResponse response = orderService.cancelOrder(orderId, user.getId());
+
+        return ResponseEntity.ok(response);
     }
 }

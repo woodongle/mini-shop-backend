@@ -1,6 +1,5 @@
 package mini.minishop.service;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,7 @@ import mini.minishop.dto.goods.CreateGoodsRequest;
 import mini.minishop.dto.goods.FindGoodsResponse;
 import mini.minishop.dto.goods.UpdateGoodsRequest;
 import mini.minishop.dto.goods.UpdateGoodsResponse;
+import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.goods.GoodsErrorCode;
 import mini.minishop.repository.GoodsRepository;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class GoodsService {
     public FindGoodsResponse findGoods(Long goodsId) {
         Optional<Goods> findGoods = goodsRepository.findById(goodsId);
         Goods goods = findGoods.orElseThrow(
-                () -> new IllegalArgumentException(GoodsErrorCode.GOODS_NOT_FOUND.getMessage())
+                () -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND)
         );
 
         return FindGoodsResponse.of(goods);
@@ -59,13 +59,12 @@ public class GoodsService {
     }
 
     @Transactional
-    public UpdateGoodsResponse updateGoods(Long goodsId, Long userId, UpdateGoodsRequest request)
-            throws AccessDeniedException {
+    public UpdateGoodsResponse updateGoods(Long goodsId, Long userId, UpdateGoodsRequest request) {
         Goods findGoods = goodsRepository.findById(goodsId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+                .orElseThrow(() -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND));
 
         if (!userId.equals(findGoods.getUser().getId())) {
-            throw new AccessDeniedException("상품을 수정할 권한이 없습니다.");
+            throw new BusinessException(GoodsErrorCode.NO_PERMISSION_MODIFY_GOODS);
         }
 
         findGoods.update(

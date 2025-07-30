@@ -3,6 +3,7 @@ package mini.minishop.service;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.domain.RefreshToken;
 import mini.minishop.domain.User;
+import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.user.UserErrorCode;
 import mini.minishop.repository.RefreshTokenRepository;
 import mini.minishop.repository.UserRepository;
@@ -19,7 +20,7 @@ public class RefreshTokenService {
 
     public void saveOrUpdate(Long userId, String token) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(UserErrorCode.USER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));
 
         refreshTokenRepository.findByUserId(userId)
                 .ifPresentOrElse(
