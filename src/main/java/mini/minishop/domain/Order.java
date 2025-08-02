@@ -1,5 +1,7 @@
 package mini.minishop.domain;
 
+import static jakarta.persistence.CascadeType.ALL;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,13 +41,13 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
     // 하나의 주문에 여러 가지 상품이 있을 수 있다고 정의했지만,
     // 하나의 주문에 하나의 상품만 있어야 한다고 변경해야 할 것 같음.
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = ALL)
     private List<OrderGoods> orderGoods = new ArrayList<>();
 
     @Builder
