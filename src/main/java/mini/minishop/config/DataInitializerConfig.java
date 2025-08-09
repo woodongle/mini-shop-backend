@@ -1,6 +1,7 @@
 package mini.minishop.config;
 
 import java.math.BigDecimal;
+import java.util.List;
 import mini.minishop.domain.Goods;
 import mini.minishop.domain.User;
 import mini.minishop.domain.UserRole;
@@ -42,9 +43,7 @@ public class DataInitializerConfig {
                     .role(UserRole.USER)
                     .build();
 
-            userRepository.save(user1);
-            userRepository.save(user2);
-            userRepository.save(user3);
+            userRepository.saveAll(List.of(user1, user2, user3));
         };
     }
 
@@ -102,12 +101,7 @@ public class DataInitializerConfig {
                     .inventoryQuantity(600)
                     .build();
 
-            goodsRepository.save(goods1);
-            goodsRepository.save(goods2);
-            goodsRepository.save(goods3);
-            goodsRepository.save(goods4);
-            goodsRepository.save(goods5);
-            goodsRepository.save(goods6);
+            goodsRepository.saveAll(List.of(goods1, goods2, goods3, goods4, goods5, goods6));
         };
     }
 }
