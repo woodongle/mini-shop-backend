@@ -14,7 +14,7 @@ public class CancelOrderResponse {
     private OrderStatus orderStatus;
     private LocalDateTime orderCreatedDate;
     private LocalDateTime orderCanceledDate;
-    private List<OrderGoodsDto> orderGoods;
+    private List<OrderGoodsResponse> orderGoods;
 
     public CancelOrderResponse(Order order) {
         this.orderId = order.getId();
@@ -22,7 +22,7 @@ public class CancelOrderResponse {
         this.orderCreatedDate = order.getCreatedDate();
         this.orderCanceledDate = order.getCanceledDate();
         this.orderGoods = order.getOrderGoods().stream()
-                .map(OrderGoodsDto::new)
+                .map(OrderGoodsResponse::new)
                 .toList();
     }
 }

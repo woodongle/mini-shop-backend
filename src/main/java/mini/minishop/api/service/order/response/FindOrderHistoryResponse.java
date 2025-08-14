@@ -13,14 +13,14 @@ public class FindOrderHistoryResponse {
     private Long orderId;
     private OrderStatus orderStatus;
     private LocalDateTime orderDate;
-    private List<OrderGoodsDto> orderGoods;
+    private List<OrderGoodsResponse> orderGoods;
 
     public FindOrderHistoryResponse(Order order) {
         this.orderId = order.getId();
         this.orderStatus = order.getStatus();
         this.orderDate = order.getCreatedDate();
         this.orderGoods = order.getOrderGoods().stream()
-                .map(OrderGoodsDto::new)
+                .map(OrderGoodsResponse::new)
                 .toList();
     }
 }

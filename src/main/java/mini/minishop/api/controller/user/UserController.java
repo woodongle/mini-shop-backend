@@ -8,7 +8,7 @@ import mini.minishop.api.controller.user.request.TokenRefreshRequest;
 import mini.minishop.api.service.user.RefreshTokenService;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.api.service.user.response.FindUserResponse;
-import mini.minishop.api.service.user.response.TokenDto;
+import mini.minishop.api.service.user.response.TokenResponse;
 import mini.minishop.config.JwtTokenProvider;
 import mini.minishop.domain.user.RefreshToken;
 import mini.minishop.domain.user.User;
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequest LoginRequest) {
+    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest LoginRequest) {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(
                 new UsernamePasswordAuthenticationToken(LoginRequest.getEmail(), LoginRequest.getPassword())
         );
@@ -62,7 +62,7 @@ public class UserController {
 
         refreshTokenService.saveOrUpdate(user.getId(), refreshTokenValue);
 
-        return ResponseEntity.ok(new TokenDto(accessToken, refreshTokenValue));
+        return ResponseEntity.ok(new TokenResponse(accessToken, refreshTokenValue));
     }
 
     @PostMapping("/logout")
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenDto> refresh(@RequestBody TokenRefreshRequest TokenRefreshRequest) {
+    public ResponseEntity<TokenResponse> refresh(@RequestBody TokenRefreshRequest TokenRefreshRequest) {
         String requestRefreshToken = TokenRefreshRequest.getRefreshToken();
         jwtTokenProvider.validateToken(requestRefreshToken);
 
@@ -96,6 +96,6 @@ public class UserController {
 
         refreshToken.updateToken(newRefreshTokenValue);
 
-        return ResponseEntity.ok(new TokenDto(newAccessToken, newRefreshTokenValue));
+        return ResponseEntity.ok(new TokenResponse(newAccessToken, newRefreshTokenValue));
     }
 }
