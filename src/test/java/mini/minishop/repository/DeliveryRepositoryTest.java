@@ -1,8 +1,9 @@
 package mini.minishop.repository;
 
 import jakarta.transaction.Transactional;
-import mini.minishop.domain.Delivery;
-import mini.minishop.domain.DeliveryStatus;
+import mini.minishop.domain.delivery.Delivery;
+import mini.minishop.domain.delivery.DeliveryRepository;
+import mini.minishop.domain.delivery.DeliveryStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package mini.minishop.handler;
 
-import mini.minishop.dto.exception.ErrorResponse;
+import mini.minishop.api.ErrorResponse;
 import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.CommonErrorCode;
 import mini.minishop.exception.ErrorCode;

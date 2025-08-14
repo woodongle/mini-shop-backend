@@ -1,7 +1,8 @@
 package mini.minishop.repository;
 
 import jakarta.transaction.Transactional;
-import mini.minishop.domain.User;
+import mini.minishop.domain.user.User;
+import mini.minishop.domain.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

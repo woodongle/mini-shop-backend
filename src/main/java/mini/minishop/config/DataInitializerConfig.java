@@ -2,11 +2,11 @@ package mini.minishop.config;
 
 import java.math.BigDecimal;
 import java.util.List;
-import mini.minishop.domain.Goods;
-import mini.minishop.domain.User;
-import mini.minishop.domain.UserRole;
-import mini.minishop.repository.GoodsRepository;
-import mini.minishop.repository.UserRepository;
+import mini.minishop.domain.goods.Goods;
+import mini.minishop.domain.goods.GoodsRepository;
+import mini.minishop.domain.user.User;
+import mini.minishop.domain.user.UserRepository;
+import mini.minishop.domain.user.UserRole;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

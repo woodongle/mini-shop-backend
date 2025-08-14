@@ -2,7 +2,8 @@ package mini.minishop.repository;
 
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
-import mini.minishop.domain.Goods;
+import mini.minishop.domain.goods.Goods;
+import mini.minishop.domain.goods.GoodsRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
