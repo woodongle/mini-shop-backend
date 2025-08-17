@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> createUser(@Valid @RequestBody CreateUserRequest request) {
-        Long userId = userService.createUser(request);
+        User createdUser = userService.createUser(request);
 
         return new ResponseEntity<>("가입을 축하드립니다.", HttpStatus.CREATED);
     }

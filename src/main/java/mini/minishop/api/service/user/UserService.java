@@ -22,7 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Long createUser(CreateUserRequest request) {
+    public User createUser(CreateUserRequest request) {
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = User.builder()
@@ -35,7 +35,7 @@ public class UserService {
         validateDuplicateEmail(user);
         userRepository.save(user);
 
-        return user.getId();
+        return user;
     }
 
     private void validateDuplicateEmail(User user) {
