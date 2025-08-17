@@ -1,7 +1,5 @@
-package mini.minishop.handler;
+package mini.minishop.api;
 
-import mini.minishop.api.ApiResponse;
-import mini.minishop.api.ErrorResponse;
 import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.CommonErrorCode;
 import mini.minishop.exception.ErrorCode;
@@ -10,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class ApiControllerAdvice {
 
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ApiResponse<ErrorResponse>> handleBusinessException(BusinessException e) {
