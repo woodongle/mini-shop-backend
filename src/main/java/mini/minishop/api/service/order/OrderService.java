@@ -33,7 +33,7 @@ public class OrderService {
     private final OrderGoodsRepository orderGoodsRepository;
 
     @Transactional
-    public Long createOrder(CreateOrderRequest request, User user, Long goodsId) {
+    public Order createOrder(CreateOrderRequest request, User user, Long goodsId) {
         Delivery delivery = Delivery.builder()
                 .status(DeliveryStatus.BEFORE_DELIVERY)
                 .address(request.getAddress())
@@ -57,7 +57,7 @@ public class OrderService {
                 .build();
         orderGoodsRepository.save(orderGoods);
 
-        return order.getId();
+        return order;
     }
 
     public List<FindOrderHistoryResponse> findOrderHistory(Long userId) {

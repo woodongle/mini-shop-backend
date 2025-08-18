@@ -8,6 +8,7 @@ import mini.minishop.api.service.order.OrderService;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.api.service.user.UserService;
+import mini.minishop.domain.order.Order;
 import mini.minishop.domain.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,7 @@ public class OrderController {
                                               @PathVariable Long goodsId) {
 
         User user = userService.findUser(userDetails.getUsername());
-        orderService.createOrder(request, user, goodsId);
+        Order createdOrder = orderService.createOrder(request, user, goodsId);
 
         return ResponseEntity.ok("상품 주문이 완료되었습니다.");
     }
