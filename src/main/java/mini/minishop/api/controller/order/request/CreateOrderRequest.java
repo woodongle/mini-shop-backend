@@ -2,6 +2,7 @@ package mini.minishop.api.controller.order.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,9 @@ public class CreateOrderRequest {
     @Positive(message = "주문 상품 수량은 양수여야 합니다.")
     private int orderGoodsQuantity;
 
-
+    @Builder
+    public CreateOrderRequest(String address, int orderGoodsQuantity) {
+        this.address = address;
+        this.orderGoodsQuantity = orderGoodsQuantity;
+    }
 }
