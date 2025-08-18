@@ -23,7 +23,7 @@ public class GoodsService {
     private final GoodsRepository goodsRepository;
 
     @Transactional
-    public Long createGoods(CreateGoodsRequest request, User user) {
+    public Goods createGoods(CreateGoodsRequest request, User user) {
         Goods goods = Goods.builder()
                 .name(request.getName())
                 .price(request.getPrice())
@@ -31,9 +31,7 @@ public class GoodsService {
                 .user(user)
                 .build();
 
-        Goods savedGoods = goodsRepository.save(goods);
-
-        return savedGoods.getId();
+        return goodsRepository.save(goods);
     }
 
     public List<FindGoodsResponse> findGoods() {

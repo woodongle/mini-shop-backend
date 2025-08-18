@@ -9,6 +9,7 @@ import mini.minishop.api.service.goods.GoodsService;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.api.service.user.UserService;
+import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class GoodsController {
     public ResponseEntity<String> createGoods(@RequestBody @Valid CreateGoodsRequest request,
                                               @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
-        Long goodsId = goodsService.createGoods(request, user);
+        Goods goods = goodsService.createGoods(request, user);
 
         return new ResponseEntity<>("상품 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
