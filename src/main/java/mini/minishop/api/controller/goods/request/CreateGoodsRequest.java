@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +22,11 @@ public class CreateGoodsRequest {
 
     @Positive(message = "재고 수량은 양수여야 합니다.")
     private int inventoryQuantity;
+
+    @Builder
+    public CreateGoodsRequest(String name, BigDecimal price, int inventoryQuantity) {
+        this.name = name;
+        this.price = price;
+        this.inventoryQuantity = inventoryQuantity;
+    }
 }
