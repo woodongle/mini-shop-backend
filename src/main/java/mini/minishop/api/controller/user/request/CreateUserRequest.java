@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import mini.minishop.api.service.user.request.CreateUserServiceRequest;
 
 @Getter
 @Setter
@@ -23,5 +24,13 @@ public class CreateUserRequest {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public CreateUserServiceRequest toServiceRequest() {
+        return CreateUserServiceRequest.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
     }
 }

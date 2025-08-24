@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> createUser(@Valid @RequestBody CreateUserRequest request) {
-        User createdUser = userService.createUser(request);
+        User createdUser = userService.createUser(request.toServiceRequest());
 
         return new ResponseEntity<>("가입을 축하드립니다.", HttpStatus.CREATED);
     }

@@ -2,7 +2,7 @@ package mini.minishop.api.service.user;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import mini.minishop.api.controller.user.request.CreateUserRequest;
+import mini.minishop.api.service.user.request.CreateUserServiceRequest;
 import mini.minishop.api.service.user.response.FindUserResponse;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRepository;
@@ -22,7 +22,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User createUser(CreateUserRequest request) {
+    public User createUser(CreateUserServiceRequest request) {
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = User.builder()
