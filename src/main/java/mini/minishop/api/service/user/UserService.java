@@ -6,7 +6,6 @@ import mini.minishop.api.service.user.request.CreateUserServiceRequest;
 import mini.minishop.api.service.user.response.FindUserResponse;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRepository;
-import mini.minishop.domain.user.UserRole;
 import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.user.UserErrorCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,12 +24,7 @@ public class UserService {
     public User createUser(CreateUserServiceRequest request) {
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
-        User user = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(encryptedPassword)
-                .role(UserRole.USER)
-                .build();
+        User user = request.toEntity(encryptedPassword);
 
         validateDuplicateEmail(user);
         userRepository.save(user);

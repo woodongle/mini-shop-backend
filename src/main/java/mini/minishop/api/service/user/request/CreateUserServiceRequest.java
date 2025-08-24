@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import mini.minishop.domain.user.User;
 
 @Getter
 @Setter
@@ -24,5 +25,12 @@ public class CreateUserServiceRequest {
         this.email = email;
         this.password = password;
     }
-    
+
+    public User toEntity(String encryptedPassword) {
+        return User.builder()
+                .name(name)
+                .email(email)
+                .password(encryptedPassword)
+                .build();
+    }
 }
