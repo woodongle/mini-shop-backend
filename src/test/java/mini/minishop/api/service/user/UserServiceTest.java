@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import mini.minishop.api.controller.user.request.CreateUserRequest;
+import mini.minishop.api.service.user.request.CreateUserServiceRequest;
 import mini.minishop.api.service.user.response.FindUserResponse;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRepository;
@@ -45,7 +45,7 @@ class UserServiceTest {
         String username = "user";
         String userEmail = "user@user.com";
         String userPassword = "user";
-        CreateUserRequest request = CreateUserRequest.builder()
+        CreateUserServiceRequest request = CreateUserServiceRequest.builder()
                 .name(username)
                 .email(userEmail)
                 .password(userPassword)
@@ -72,7 +72,7 @@ class UserServiceTest {
         em.flush();
         em.clear();
 
-        CreateUserRequest request = CreateUserRequest.builder()
+        CreateUserServiceRequest request = CreateUserServiceRequest.builder()
                 .name("user2")
                 .email(userEmail)
                 .password("user2")
