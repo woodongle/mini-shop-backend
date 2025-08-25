@@ -7,8 +7,8 @@ import static org.assertj.core.groups.Tuple.tuple;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
-import mini.minishop.api.controller.goods.request.CreateGoodsRequest;
-import mini.minishop.api.controller.goods.request.UpdateGoodsRequest;
+import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
+import mini.minishop.api.service.goods.request.UpdateGoodsServiceRequest;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.domain.goods.Goods;
@@ -58,7 +58,7 @@ class GoodsServiceTest {
         String goodsName = "goods";
         BigDecimal goodsPrice = new BigDecimal("1000.00");
         int goodsInventoryQuantity = 10;
-        CreateGoodsRequest request = CreateGoodsRequest.builder().name(goodsName).price(goodsPrice)
+        CreateGoodsServiceRequest request = CreateGoodsServiceRequest.builder().name(goodsName).price(goodsPrice)
                 .inventoryQuantity(goodsInventoryQuantity).build();
 
         // when
@@ -198,7 +198,7 @@ class GoodsServiceTest {
         String newGoodsName = "newGoodsName";
         BigDecimal newGoodsPrice = new BigDecimal("2000.00");
         int newGoodsInventoryQuantity = 20;
-        UpdateGoodsRequest request = UpdateGoodsRequest.builder()
+        UpdateGoodsServiceRequest request = UpdateGoodsServiceRequest.builder()
                 .goodsName(newGoodsName)
                 .price(newGoodsPrice)
                 .inventoryQuantity(newGoodsInventoryQuantity)
@@ -223,7 +223,7 @@ class GoodsServiceTest {
         Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user);
         goodsRepository.save(goods);
 
-        UpdateGoodsRequest request = UpdateGoodsRequest.builder()
+        UpdateGoodsServiceRequest request = UpdateGoodsServiceRequest.builder()
                 .goodsName("newGoodsName")
                 .price(new BigDecimal("2000.00"))
                 .inventoryQuantity(20)
@@ -248,7 +248,7 @@ class GoodsServiceTest {
         Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user);
         goodsRepository.save(goods);
 
-        UpdateGoodsRequest request = UpdateGoodsRequest.builder()
+        UpdateGoodsServiceRequest request = UpdateGoodsServiceRequest.builder()
                 .goodsName("newGoodsName")
                 .price(new BigDecimal("2000.00"))
                 .inventoryQuantity(20)
