@@ -2,7 +2,7 @@ package mini.minishop.api.service.order;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import mini.minishop.api.controller.order.request.CreateOrderRequest;
+import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.domain.delivery.Delivery;
@@ -33,7 +33,7 @@ public class OrderService {
     private final OrderGoodsRepository orderGoodsRepository;
 
     @Transactional
-    public Order createOrder(CreateOrderRequest request, User user, Long goodsId) {
+    public Order createOrder(CreateOrderServiceRequest request, User user, Long goodsId) {
         Delivery delivery = Delivery.builder()
                 .status(DeliveryStatus.BEFORE_DELIVERY)
                 .address(request.getAddress())

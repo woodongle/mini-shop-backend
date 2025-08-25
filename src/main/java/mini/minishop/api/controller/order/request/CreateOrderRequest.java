@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 
 @Getter
 @Setter
@@ -20,5 +21,12 @@ public class CreateOrderRequest {
     public CreateOrderRequest(String address, int orderGoodsQuantity) {
         this.address = address;
         this.orderGoodsQuantity = orderGoodsQuantity;
+    }
+
+    public CreateOrderServiceRequest toServiceRequest() {
+        return CreateOrderServiceRequest.builder()
+                .address(address)
+                .orderGoodsQuantity(orderGoodsQuantity)
+                .build();
     }
 }

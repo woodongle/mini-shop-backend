@@ -35,7 +35,7 @@ public class OrderController {
                                               @PathVariable Long goodsId) {
 
         User user = userService.findUser(userDetails.getUsername());
-        Order createdOrder = orderService.createOrder(request, user, goodsId);
+        Order createdOrder = orderService.createOrder(request.toServiceRequest(), user, goodsId);
 
         return ResponseEntity.ok("상품 주문이 완료되었습니다.");
     }
