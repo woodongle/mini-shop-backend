@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.tuple;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
-import mini.minishop.api.controller.order.request.CreateOrderRequest;
+import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.domain.delivery.Delivery;
@@ -85,7 +85,7 @@ class OrderServiceTest {
 
         String deliveryAddress = "서울시";
         int orderGoodsQuantity = 2;
-        CreateOrderRequest request = CreateOrderRequest.builder()
+        CreateOrderServiceRequest request = CreateOrderServiceRequest.builder()
                 .address(deliveryAddress)
                 .orderGoodsQuantity(orderGoodsQuantity)
                 .build();
@@ -119,7 +119,7 @@ class OrderServiceTest {
         Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user);
         goodsRepository.save(goods);
 
-        CreateOrderRequest request = CreateOrderRequest.builder()
+        CreateOrderServiceRequest request = CreateOrderServiceRequest.builder()
                 .address("서울시")
                 .orderGoodsQuantity(2)
                 .build();
