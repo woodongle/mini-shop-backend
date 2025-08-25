@@ -36,7 +36,7 @@ public class GoodsController {
     public ResponseEntity<String> createGoods(@RequestBody @Valid CreateGoodsRequest request,
                                               @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
-        Goods goods = goodsService.createGoods(request, user);
+        Goods goods = goodsService.createGoods(request.toServiceRequest(), user);
 
         return new ResponseEntity<>("상품 등록이 완료되었습니다.", HttpStatus.CREATED);
     }
@@ -67,7 +67,7 @@ public class GoodsController {
                                                            @RequestBody UpdateGoodsRequest request,
                                                            @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
-        UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request);
+        UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request.toServiceRequest());
 
         return ResponseEntity.ok(response);
     }

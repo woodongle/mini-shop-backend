@@ -3,8 +3,8 @@ package mini.minishop.api.service.goods;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import mini.minishop.api.controller.goods.request.CreateGoodsRequest;
-import mini.minishop.api.controller.goods.request.UpdateGoodsRequest;
+import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
+import mini.minishop.api.service.goods.request.UpdateGoodsServiceRequest;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.domain.goods.Goods;
@@ -23,13 +23,8 @@ public class GoodsService {
     private final GoodsRepository goodsRepository;
 
     @Transactional
-    public Goods createGoods(CreateGoodsRequest request, User user) {
-        Goods goods = Goods.builder()
-                .name(request.getName())
-                .price(request.getPrice())
-                .inventoryQuantity(request.getInventoryQuantity())
-                .user(user)
-                .build();
+    public Goods createGoods(CreateGoodsServiceRequest request, User user) {
+        Goods goods = request.toEntity();
 
         return goodsRepository.save(goods);
     }
@@ -57,7 +52,7 @@ public class GoodsService {
     }
 
     @Transactional
-    public UpdateGoodsResponse updateGoods(Long goodsId, Long userId, UpdateGoodsRequest request) {
+    public UpdateGoodsResponse updateGoods(Long goodsId, Long userId, UpdateGoodsServiceRequest request) {
         Goods findGoods = goodsRepository.findById(goodsId)
                 .orElseThrow(() -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND));
 

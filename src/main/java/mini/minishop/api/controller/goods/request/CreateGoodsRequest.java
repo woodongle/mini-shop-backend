@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
 
 @Getter
 @Setter
@@ -28,5 +29,13 @@ public class CreateGoodsRequest {
         this.name = name;
         this.price = price;
         this.inventoryQuantity = inventoryQuantity;
+    }
+
+    public CreateGoodsServiceRequest toServiceRequest() {
+        return CreateGoodsServiceRequest.builder()
+                .name(name)
+                .price(price)
+                .inventoryQuantity(inventoryQuantity)
+                .build();
     }
 }
