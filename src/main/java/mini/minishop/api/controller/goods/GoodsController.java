@@ -64,7 +64,7 @@ public class GoodsController {
 
     @PatchMapping("/{goodsId}")
     public ResponseEntity<UpdateGoodsResponse> updateGoods(@PathVariable Long goodsId,
-                                                           @RequestBody UpdateGoodsRequest request,
+                                                           @Valid @RequestBody UpdateGoodsRequest request,
                                                            @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
         UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request.toServiceRequest());
