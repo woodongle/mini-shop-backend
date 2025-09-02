@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum CommonErrorCode implements ErrorCode {
-    INTERNAL_SERVER_ERROR("C001", "서버에 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    INTERNAL_SERVER_ERROR("C001", "서버에 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_PARAMETER("C002", "사용자 입력이 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
 
     private final String code;
     private final String message;
