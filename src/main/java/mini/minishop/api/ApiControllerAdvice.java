@@ -4,6 +4,7 @@ import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.CommonErrorCode;
 import mini.minishop.exception.ErrorCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,6 +15,16 @@ public class ApiControllerAdvice {
     protected ResponseEntity<ApiResponse<ErrorResponse>> handleBusinessException(BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = ErrorResponse.of(errorCode);
+
+        return new ResponseEntity<>(ApiResponse.of(response.getStatus(), response), errorCode.getStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ApiResponse<ErrorResponse>> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException e) {
+        String message = e.getBindingResult().getFieldErrors().getFirst().getDefaultMessage();
+        ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
+        ErrorResponse response = ErrorResponse.of(errorCode, message);
 
         return new ResponseEntity<>(ApiResponse.of(response.getStatus(), response), errorCode.getStatus());
     }
