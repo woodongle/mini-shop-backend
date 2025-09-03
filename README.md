@@ -1,7 +1,7 @@
 # Mini Shop
 
 <div align="center">
-
+  <img width="300" height="300" alt="minishop_logo" src="https://github.com/user-attachments/assets/7343ddb3-d12e-4bcc-99e7-bdc73c79e7fb" />
 </div>
 
 ## 🚀프로젝트 소개
