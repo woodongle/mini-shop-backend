@@ -11,7 +11,7 @@
 
 <hr>
 
-### 프로젝트 과정
+### 💡프로젝트 과정
 [프로젝트 과정 정리 Notion](https://young-hair-9ab.notion.site/Spring-Boot-JPA-REST-API-21f86702809c806c8d15e93f1f5f4450?source=copy_link)
 
 <hr>
