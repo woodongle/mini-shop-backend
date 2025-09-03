@@ -11,6 +11,11 @@
 
 <hr>
 
+### 프로젝트 과정
+[프로젝트 과정 정리 Notion](https://young-hair-9ab.notion.site/Spring-Boot-JPA-REST-API-21f86702809c806c8d15e93f1f5f4450?source=copy_link)
+
+<hr>
+
 ### 📱개발 기간
 
 - 2025.07.01 ~ 2025.09.02
@@ -20,7 +25,7 @@
 ### 🛠️기술 스택
 
 - **Environment**: IntelliJ IDEA, GitHub, Notion
-- **Backend**: Java, Spring Boot, Spring Security, JWT
+- **Backend**: Java, Spring Boot, Spring Security, JPA, JWT
 - **Database**: H2 Database
 
 <hr>
