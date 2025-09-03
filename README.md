@@ -19,9 +19,9 @@
 
 ### 🛠️기술 스택
 
-- Environment: IntelliJ IDEA, GitHub, Notion
-- Backend: Java, Spring Boot, Spring Security, JWT
-- Database: H2 Database
+- **Environment**: IntelliJ IDEA, GitHub, Notion
+- **Backend**: Java, Spring Boot, Spring Security, JWT
+- **Database**: H2 Database
 
 <hr>
 
