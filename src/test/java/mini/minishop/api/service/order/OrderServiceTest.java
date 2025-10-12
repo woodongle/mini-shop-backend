@@ -304,6 +304,32 @@ class OrderServiceTest {
                 .hasMessage("주문을 취소할 권한이 없습니다.");
     }
 
+    @DisplayName("이미 배송이 진행된 경우, 예외가 발생한다.")
+    @Transactional
+    @Test
+    void cancelOrderAfterDeliveryStarted() {
+        // given
+        User user = createUser("user", "user@user.com", "user");
+        userRepository.save(user);
+
+        Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user);
+        goodsRepository.save(goods);
+
+        Delivery delivery = createDelivery(DeliveryStatus.DELIVERING, "서울시");
+        deliveryRepository.save(delivery);
+
+        Order order = createOrder(user, delivery);
+        orderRepository.save(order);
+
+        OrderGoods orderGoods = createOrderGoods(2, order, goods);
+        orderGoodsRepository.save(orderGoods);
+
+        // when // then
+        assertThatThrownBy(() -> orderService.cancelOrder(order.getId(), user.getId()))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("배송이 진행 중이거나, 이미 배송 완료된 상품은 취소가 불가능합니다.");
+    }
+
     private User createUser(String name, String email, String password) {
         String encodedPassword = passwordEncoder.encode(password);
 
