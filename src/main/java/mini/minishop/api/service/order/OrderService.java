@@ -38,7 +38,6 @@ public class OrderService {
                 .status(DeliveryStatus.BEFORE_DELIVERY)
                 .address(request.getAddress())
                 .build();
-        deliveryRepository.save(delivery);
 
         Order order = Order.builder()
                 .status(OrderStatus.COMPLETED_ORDER)
