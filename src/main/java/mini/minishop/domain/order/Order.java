@@ -26,6 +26,8 @@ import mini.minishop.domain.delivery.Delivery;
 import mini.minishop.domain.delivery.DeliveryStatus;
 import mini.minishop.domain.ordergoods.OrderGoods;
 import mini.minishop.domain.user.User;
+import mini.minishop.exception.BusinessException;
+import mini.minishop.exception.delivery.DeliveryErrorCode;
 
 @Entity
 @Table(name = "orders")
@@ -63,7 +65,7 @@ public class Order extends BaseTimeEntity {
 
     public void cancel() {
         if (delivery.getStatus() != DeliveryStatus.BEFORE_DELIVERY) {
-            throw new IllegalStateException("배송이 진행 중이거나, 이미 배송 완료된 상품은 취소가 불가능합니다.");
+            throw new BusinessException(DeliveryErrorCode.DELIVERY_CANCEL_NOT_ALLOWED);
         }
 
         this.status = OrderStatus.CANCELED_ORDER;
