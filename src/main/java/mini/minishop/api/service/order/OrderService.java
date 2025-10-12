@@ -44,19 +44,17 @@ public class OrderService {
                 .user(user)
                 .delivery(delivery)
                 .build();
-        Order savedOrder = orderRepository.save(order);
 
         Goods findGoods = goodsRepository.findById(goodsId)
                 .orElseThrow(() -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND));
 
         OrderGoods orderGoods = OrderGoods.builder()
-                .order(savedOrder)
+                .order(order)
                 .goods(findGoods)
                 .quantity(request.getOrderGoodsQuantity())
                 .build();
-        orderGoodsRepository.save(orderGoods);
 
-        return order;
+        return orderRepository.save(order);
     }
 
     public List<FindOrderHistoryResponse> findOrderHistory(Long userId) {
