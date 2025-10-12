@@ -16,6 +16,7 @@ import mini.minishop.domain.ordergoods.OrderGoods;
 import mini.minishop.domain.ordergoods.OrderGoodsRepository;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,15 @@ class OrderRepositoryTest {
 
     @Autowired
     private EntityManager em;
+
+    @AfterEach
+    void tearDown() {
+        orderGoodsRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
+        deliveryRepository.deleteAllInBatch();
+        goodsRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+    }
 
     @DisplayName("사용자 ID로 주문 내역을 조회한다.")
     @Transactional
