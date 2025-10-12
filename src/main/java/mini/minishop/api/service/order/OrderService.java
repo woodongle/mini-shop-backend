@@ -6,7 +6,6 @@ import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.domain.delivery.Delivery;
-import mini.minishop.domain.delivery.DeliveryRepository;
 import mini.minishop.domain.delivery.DeliveryStatus;
 import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.goods.GoodsRepository;
@@ -14,7 +13,6 @@ import mini.minishop.domain.order.Order;
 import mini.minishop.domain.order.OrderRepository;
 import mini.minishop.domain.order.OrderStatus;
 import mini.minishop.domain.ordergoods.OrderGoods;
-import mini.minishop.domain.ordergoods.OrderGoodsRepository;
 import mini.minishop.domain.user.User;
 import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.goods.GoodsErrorCode;
@@ -28,9 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final DeliveryRepository deliveryRepository;
     private final GoodsRepository goodsRepository;
-    private final OrderGoodsRepository orderGoodsRepository;
 
     @Transactional
     public Order createOrder(CreateOrderServiceRequest request, User user, Long goodsId) {
