@@ -1,0 +1,12 @@
+[[goods-create]]
+=== 신규 상품 등록
+
+==== HTTP Request
+
+include::{snippets}/goods-create/http-request.adoc[]
+include::{snippets}/goods-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/goods-create/http-response.adoc[]
+include::{snippets}/goods-create/response-body.adoc[]
