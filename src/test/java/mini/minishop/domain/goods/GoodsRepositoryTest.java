@@ -8,6 +8,7 @@ import java.util.List;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,12 @@ class GoodsRepositoryTest {
 
     @Autowired
     private GoodsRepository goodsRepository;
+
+    @AfterEach
+    void tearDown() {
+        goodsRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+    }
 
     @DisplayName("입력받은 값이 포함되어 있는 상품들을 조회한다.")
     @Test
