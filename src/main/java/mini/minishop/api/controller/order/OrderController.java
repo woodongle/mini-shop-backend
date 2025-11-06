@@ -44,18 +44,18 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}/orders")
-    public ResponseEntity<List<FindOrderHistoryResponse>> findOrderHistory(@PathVariable Long userId) {
-        List<FindOrderHistoryResponse> orderHistory = orderService.findOrderHistory(userId);
+    public ResponseEntity<ApiResponse<List<FindOrderHistoryResponse>>> findOrderHistory(@PathVariable Long userId) {
+        List<FindOrderHistoryResponse> response = orderService.findOrderHistory(userId);
 
-        return ResponseEntity.ok(orderHistory);
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
     @PatchMapping("/{orderId}/cancel")
-    public ResponseEntity<CancelOrderResponse> cancelOrder(@PathVariable Long orderId,
-                                                           @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<CancelOrderResponse>> cancelOrder(@PathVariable Long orderId,
+                                                                        @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
         CancelOrderResponse response = orderService.cancelOrder(orderId, user.getId());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 }
