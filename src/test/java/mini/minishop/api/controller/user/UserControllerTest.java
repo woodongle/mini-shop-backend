@@ -3,7 +3,6 @@ package mini.minishop.api.controller.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,7 +67,9 @@ class UserControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().string("가입을 축하드립니다."));
+                .andExpect(jsonPath("$.code").value("201"))
+                .andExpect(jsonPath("$.status").value("CREATED"))
+                .andExpect(jsonPath("$.message").value("가입을 축하드립니다. 로그인 화면으로 이동합니다."));
     }
 
     @DisplayName("사용자 입력에 문제가 있으면 예외가 발생한다.")
@@ -107,8 +108,8 @@ class UserControllerTest {
         mockMvc.perform(get("/api/v1/users/{userId}", userId))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("user"))
-                .andExpect(jsonPath("$.userEmail").value("user@user.com"));
+                .andExpect(jsonPath("$.data.username").value("user"))
+                .andExpect(jsonPath("$.data.userEmail").value("user@user.com"));
     }
 
     @DisplayName("사용자 입력으로 서비스에 로그인한다.")
@@ -178,7 +179,9 @@ class UserControllerTest {
         mockMvc.perform(post("/api/v1/users/logout"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("로그아웃 되었습니다."));
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("로그아웃 되었습니다."));
     }
 
     private CreateUserRequest createUserRequest(String name, String email, String password) {
