@@ -17,6 +17,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,10 +28,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import mini.minishop.api.controller.goods.GoodsController;
 import mini.minishop.api.controller.goods.request.CreateGoodsRequest;
+import mini.minishop.api.controller.goods.request.UpdateGoodsRequest;
 import mini.minishop.api.service.goods.GoodsService;
 import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
 import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
+import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.domain.user.User;
@@ -286,4 +289,76 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                         )
                 ));
     }
+
+    @DisplayName("상품을 수정하는 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
+    @Test
+    void updateGoods() throws Exception {
+        User mockUser = User.builder()
+                .email("user@user.com")
+                .role(UserRole.USER)
+                .build();
+
+        given(userService.findUser(mockUser.getEmail())).willReturn(mockUser);
+
+        UpdateGoodsRequest request = UpdateGoodsRequest.builder()
+                .goodsName("updated-goods")
+                .price(new BigDecimal("2000.00"))
+                .inventoryQuantity(200)
+                .build();
+
+        UpdateGoodsResponse response = UpdateGoodsResponse.builder()
+                .goodsId(1L)
+                .goodsName(request.getGoodsName())
+                .price(request.getPrice())
+                .inventoryQuantity(request.getInventoryQuantity())
+                .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
+                .build();
+
+        given(goodsService.updateGoods(eq(response.getGoodsId()), eq(mockUser.getId()), any()))
+                .willReturn(response);
+
+        mockMvc.perform(patch("/api/v1/goods/{goodsId}", response.getGoodsId())
+                        .contentType(APPLICATION_JSON)
+                        .with(csrf())
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andDo(document("goods-update",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("goodsName").type(STRING)
+                                        .description("상품 이름"),
+                                fieldWithPath("price").type(NUMBER)
+                                        .description("상품 가격"),
+                                fieldWithPath("inventoryQuantity").type(NUMBER)
+                                        .description("상품 재고 수량")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드"),
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.goodsId").type(NUMBER)
+                                        .description("상품 ID"),
+                                fieldWithPath("data.goodsName").type(STRING)
+                                        .description("상품 이름"),
+                                fieldWithPath("data.price").type(NUMBER)
+                                        .description("상품 가격"),
+                                fieldWithPath("data.inventoryQuantity").type(NUMBER)
+                                        .description("상품 재고 수량"),
+                                fieldWithPath("data.modifiedDate").type(STRING)
+                                        .description("상품 수정일")
+                        )
+                ));
+    }
+
+
 }

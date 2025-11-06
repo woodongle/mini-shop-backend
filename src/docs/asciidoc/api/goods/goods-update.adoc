@@ -1,0 +1,12 @@
+[[goods-update]]
+=== 상품 수정
+
+==== HTTP Request
+
+include::{snippets}/goods-update/http-request.adoc[]
+include::{snippets}/goods-update/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/goods-update/http-response.adoc[]
+include::{snippets}/goods-update/response-fields.adoc[]
