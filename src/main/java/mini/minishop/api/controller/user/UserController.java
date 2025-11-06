@@ -72,7 +72,7 @@ public class UserController {
         User user = userService.findUser(userDetails.getUsername());
         refreshTokenService.logout(user);
 
-        return ResponseEntity.ok(ApiResponse.ok("로그아웃 되었습니다."));
+        return ResponseEntity.ok(ApiResponse.ok("로그아웃 되었습니다.", null));
     }
 
     @PostMapping("/refresh")
