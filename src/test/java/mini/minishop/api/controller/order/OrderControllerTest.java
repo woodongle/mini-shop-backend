@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -111,8 +110,10 @@ class OrderControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("상품 주문이 완료되었습니다."));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.code").value("201"))
+                .andExpect(jsonPath("$.status").value("CREATED"))
+                .andExpect(jsonPath("$.message").value("상품 주문이 완료되었습니다."));
     }
 
     @DisplayName("사용자 입력에 문제가 있으면 예외가 발생한다.")
@@ -204,14 +205,14 @@ class OrderControllerTest {
         mockMvc.perform(get("/api/v1/order/{userId}/orders", userId))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].orderStatus").value("COMPLETED_ORDER"))
-                .andExpect(jsonPath("$[0].orderGoods[0].goodsName").value("goods"))
-                .andExpect(jsonPath("$[0].orderGoods[0].quantity").value(2))
-                .andExpect(jsonPath("$[0].orderGoods[0].paymentAmount").value(2000.00))
-                .andExpect(jsonPath("$[1].orderStatus").value("COMPLETED_ORDER"))
-                .andExpect(jsonPath("$[1].orderGoods[0].goodsName").value("goods"))
-                .andExpect(jsonPath("$[1].orderGoods[0].quantity").value(3))
-                .andExpect(jsonPath("$[1].orderGoods[0].paymentAmount").value(3000.00));
+                .andExpect(jsonPath("$.data.[0].orderStatus").value("COMPLETED_ORDER"))
+                .andExpect(jsonPath("$.data.[0].orderGoods[0].goodsName").value("goods"))
+                .andExpect(jsonPath("$.data.[0].orderGoods[0].quantity").value(2))
+                .andExpect(jsonPath("$.data.[0].orderGoods[0].paymentAmount").value(2000.00))
+                .andExpect(jsonPath("$.data.[1].orderStatus").value("COMPLETED_ORDER"))
+                .andExpect(jsonPath("$.data.[1].orderGoods[0].goodsName").value("goods"))
+                .andExpect(jsonPath("$.data.[1].orderGoods[0].quantity").value(3))
+                .andExpect(jsonPath("$.data.[1].orderGoods[0].paymentAmount").value(3000.00));
     }
 
     @DisplayName("주문 ID로 주문을 취소한다.")
@@ -269,7 +270,7 @@ class OrderControllerTest {
         mockMvc.perform(patch("/api/v1/order/{orderId}/cancel", order1Id))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderCanceledDate").exists());
+                .andExpect(jsonPath("$.data.canceledDate").exists());
     }
 
     private User createUser(String name, String email, String password) {

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
+import mini.minishop.api.service.order.response.CreateOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.domain.delivery.Delivery;
 import mini.minishop.domain.delivery.DeliveryRepository;
@@ -94,17 +95,10 @@ class OrderServiceTest {
         em.clear();
 
         // when
-        Order createdOrder = orderService.createOrder(request, user, goods.getId());
+        CreateOrderResponse response = orderService.createOrder(request, user, goods.getId());
 
         // then
-        assertThat(createdOrder.getStatus()).isEqualByComparingTo(OrderStatus.COMPLETED_ORDER);
-        assertThat(createdOrder.getUser())
-                .extracting("name", "email")
-                .containsExactlyInAnyOrder(userName, userEmail);
-        assertThat(createdOrder.getDelivery())
-                .extracting("status", "address")
-                .containsExactlyInAnyOrder(DeliveryStatus.BEFORE_DELIVERY, deliveryAddress);
-        assertThat(createdOrder.getOrderGoods().getFirst())
+        assertThat(response.getOrderGoods().getFirst())
                 .extracting("quantity", "paymentAmount")
                 .containsExactlyInAnyOrder(orderGoodsQuantity, goodsPrice.multiply(new BigDecimal(orderGoodsQuantity)));
     }
