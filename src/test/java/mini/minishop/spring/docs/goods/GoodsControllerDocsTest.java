@@ -7,23 +7,27 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import mini.minishop.api.controller.goods.GoodsController;
 import mini.minishop.api.controller.goods.request.CreateGoodsRequest;
 import mini.minishop.api.service.goods.GoodsService;
 import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
+import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.config.JpaAuditingConfig;
-import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRole;
 import mini.minishop.spring.docs.RestDocsSupport;
@@ -33,7 +37,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -71,11 +74,12 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .build();
 
         given(goodsService.createGoods(any(CreateGoodsServiceRequest.class), eq(mockUser)))
-                .willReturn(Goods.builder()
-                        .name(request.getName())
+                .willReturn(CreateGoodsResponse.builder()
+                        .goodsId(1L)
+                        .goodsName(request.getName())
                         .price(request.getPrice())
                         .inventoryQuantity(request.getInventoryQuantity())
-                        .user(mockUser)
+                        .createDate(LocalDateTime.of(2000, 1, 1, 9, 0))
                         .build());
 
         mockMvc.perform(post("/api/v1/goods")
@@ -85,19 +89,40 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().string("상품 등록이 완료되었습니다."))
+                .andExpect(jsonPath("$.code").value("201"))
+                .andExpect(jsonPath("$.status").value("CREATED"))
+                .andExpect(jsonPath("$.message").value("상품 등록이 완료되었습니다."))
                 .andDo(document("goods-create",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("name").type(JsonFieldType.STRING)
+                                fieldWithPath("name").type(STRING)
                                         .description("상품 이름"),
-                                fieldWithPath("price").type(JsonFieldType.NUMBER)
+                                fieldWithPath("price").type(NUMBER)
                                         .description("상품 가격"),
-                                fieldWithPath("inventoryQuantity").type(JsonFieldType.NUMBER)
+                                fieldWithPath("inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량")
                         ),
-                        responseBody()
+                        responseFields(
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드"),
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.goodsId").type(NUMBER)
+                                        .description("상품 ID"),
+                                fieldWithPath("data.goodsName").type(STRING)
+                                        .description("상품 이름"),
+                                fieldWithPath("data.price").type(NUMBER)
+                                        .description("상품 가격"),
+                                fieldWithPath("data.inventoryQuantity").type(NUMBER)
+                                        .description("상품 재고 수량"),
+                                fieldWithPath("data.createDate").type(STRING)
+                                        .description("상품 재고 수량")
+                        )
                 ));
 
     }

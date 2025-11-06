@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
 import mini.minishop.api.service.goods.request.UpdateGoodsServiceRequest;
+import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.domain.goods.Goods;
@@ -62,11 +63,12 @@ class GoodsServiceTest {
                 .inventoryQuantity(goodsInventoryQuantity).build();
 
         // when
-        Goods savedGoods = goodsService.createGoods(request, savedUser);
+        CreateGoodsResponse goodsResponse = goodsService.createGoods(request, savedUser);
 
         // then
-        assertThat(savedGoods).extracting("name", "price", "inventoryQuantity")
-                .containsExactlyInAnyOrder(goodsName, goodsPrice, goodsInventoryQuantity);
+        assertThat(goodsResponse).extracting("goodsId", "goodsName", "price", "inventoryQuantity", "createDate")
+                .containsExactlyInAnyOrder(goodsResponse.getGoodsId(), goodsName, goodsPrice, goodsInventoryQuantity,
+                        goodsResponse.getCreateDate());
     }
 
     @DisplayName("상품 정보 응답을 리스트로 조회한다.")
