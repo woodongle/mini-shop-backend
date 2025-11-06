@@ -13,3 +13,4 @@ endif::[]
 == Goods API
 
 include::api/goods/goods-create.adoc[]
+include::api/goods/goods-find-all.adoc[]

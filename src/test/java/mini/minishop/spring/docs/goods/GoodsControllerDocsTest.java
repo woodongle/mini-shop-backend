@@ -7,6 +7,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.JsonFieldType.ARRAY;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
@@ -14,6 +15,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,11 +23,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import mini.minishop.api.controller.goods.GoodsController;
 import mini.minishop.api.controller.goods.request.CreateGoodsRequest;
 import mini.minishop.api.service.goods.GoodsService;
 import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
 import mini.minishop.api.service.goods.response.CreateGoodsResponse;
+import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.domain.user.User;
@@ -124,6 +128,60 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                         .description("상품 재고 수량")
                         )
                 ));
+    }
 
+    @DisplayName("전체 상품을 조회하는 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
+    @Test
+    void findGoods() throws Exception {
+        List<FindGoodsResponse> responses = List.of(
+                FindGoodsResponse.builder()
+                        .id(1L)
+                        .name("goods1")
+                        .price(new BigDecimal("1000.00"))
+                        .inventoryQuantity(100)
+                        .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
+                        .build(),
+                FindGoodsResponse.builder()
+                        .id(2L)
+                        .name("goods2")
+                        .price(new BigDecimal("2000.00"))
+                        .inventoryQuantity(200)
+                        .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
+                        .build()
+        );
+
+        given(goodsService.findGoods()).willReturn(responses);
+
+        mockMvc.perform(get("/api/v1/goods")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andDo(document("goods-find-all",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드"),
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(ARRAY)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data[].id").type(NUMBER)
+                                        .description("상품 ID"),
+                                fieldWithPath("data[].name").type(STRING)
+                                        .description("상품 이름"),
+                                fieldWithPath("data[].price").type(NUMBER)
+                                        .description("상품 가격"),
+                                fieldWithPath("data[].inventoryQuantity").type(NUMBER)
+                                        .description("상품 재고 수량"),
+                                fieldWithPath("data[].modifiedDate").type(STRING)
+                                        .description("상품 변경일")
+                        )
+                ));
     }
 }
