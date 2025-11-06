@@ -230,4 +230,60 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                         )
                 ));
     }
+
+    @DisplayName("상품 이름으로 상품을 조회하는 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
+    @Test
+    void searchGoodsByName() throws Exception {
+        List<FindGoodsResponse> responses = List.of(
+                FindGoodsResponse.builder()
+                        .id(1L)
+                        .name("goods1")
+                        .price(new BigDecimal("1000.00"))
+                        .inventoryQuantity(100)
+                        .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
+                        .build(),
+                FindGoodsResponse.builder()
+                        .id(2L)
+                        .name("goods2")
+                        .price(new BigDecimal("2000.00"))
+                        .inventoryQuantity(200)
+                        .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
+                        .build()
+        );
+
+        given(goodsService.searchGoodsByName("goods")).willReturn(responses);
+
+        mockMvc.perform(get("/api/v1/goods/search")
+                        .param("name", "goods")
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andDo(document("goods-search",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드"),
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(ARRAY)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data[].id").type(NUMBER)
+                                        .description("상품 ID"),
+                                fieldWithPath("data[].name").type(STRING)
+                                        .description("상품 이름"),
+                                fieldWithPath("data[].price").type(NUMBER)
+                                        .description("상품 가격"),
+                                fieldWithPath("data[].inventoryQuantity").type(NUMBER)
+                                        .description("상품 재고 수량"),
+                                fieldWithPath("data[].modifiedDate").type(STRING)
+                                        .description("상품 변경일")
+                        )
+                ));
+    }
 }
