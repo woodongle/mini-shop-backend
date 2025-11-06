@@ -1,7 +1,10 @@
 package mini.minishop.api.controller.user;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import mini.minishop.api.ApiResponse;
 import mini.minishop.api.controller.user.request.CreateUserRequest;
 import mini.minishop.api.controller.user.request.LoginRequest;
 import mini.minishop.api.controller.user.request.TokenRefreshRequest;
@@ -12,7 +15,6 @@ import mini.minishop.api.service.user.response.TokenResponse;
 import mini.minishop.config.JwtTokenProvider;
 import mini.minishop.domain.user.RefreshToken;
 import mini.minishop.domain.user.User;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -37,17 +39,17 @@ public class UserController {
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> createUser(@Valid @RequestBody CreateUserRequest request) {
+    public ResponseEntity<ApiResponse<String>> createUser(@Valid @RequestBody CreateUserRequest request) {
         User createdUser = userService.createUser(request.toServiceRequest());
 
-        return new ResponseEntity<>("가입을 축하드립니다.", HttpStatus.CREATED);
+        return ResponseEntity.status(CREATED).body(ApiResponse.created("가입을 축하드립니다. 로그인 화면으로 이동합니다.", null));
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<FindUserResponse> findUser(@PathVariable Long userId) {
-        FindUserResponse findUser = userService.findUser(userId);
+    public ResponseEntity<ApiResponse<FindUserResponse>> findUser(@PathVariable Long userId) {
+        FindUserResponse response = userService.findUser(userId);
 
-        return ResponseEntity.ok(findUser);
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
     @PostMapping("/login")
@@ -66,11 +68,11 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<String>> logout(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
         refreshTokenService.logout(user);
 
-        return ResponseEntity.ok("로그아웃 되었습니다.");
+        return ResponseEntity.ok(ApiResponse.ok("로그아웃 되었습니다."));
     }
 
     @PostMapping("/refresh")
