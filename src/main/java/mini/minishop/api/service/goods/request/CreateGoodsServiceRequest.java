@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import mini.minishop.domain.goods.Goods;
+import mini.minishop.domain.user.User;
 
 @Getter
 @Setter
@@ -21,11 +22,12 @@ public class CreateGoodsServiceRequest {
         this.inventoryQuantity = inventoryQuantity;
     }
 
-    public Goods toEntity() {
+    public Goods toEntity(User user) {
         return Goods.builder()
                 .name(name)
                 .price(price)
                 .inventoryQuantity(inventoryQuantity)
+                .user(user)
                 .build();
     }
 }

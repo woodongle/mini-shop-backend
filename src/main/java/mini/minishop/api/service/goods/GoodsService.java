@@ -24,7 +24,7 @@ public class GoodsService {
 
     @Transactional
     public Goods createGoods(CreateGoodsServiceRequest request, User user) {
-        Goods goods = request.toEntity();
+        Goods goods = request.toEntity(user);
 
         return goodsRepository.save(goods);
     }
