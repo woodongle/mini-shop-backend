@@ -38,39 +38,40 @@ public class GoodsController {
     public ResponseEntity<ApiResponse<CreateGoodsResponse>> createGoods(@RequestBody @Valid CreateGoodsRequest request,
                                                                         @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
-        CreateGoodsResponse goodsResponse = goodsService.createGoods(request.toServiceRequest(), user);
+        CreateGoodsResponse response = goodsService.createGoods(request.toServiceRequest(), user);
 
-        return ResponseEntity.status(CREATED).body(ApiResponse.create("상품 등록이 완료되었습니다.", goodsResponse));
+        return ResponseEntity.status(CREATED).body(ApiResponse.create("상품 등록이 완료되었습니다.", response));
     }
 
     @GetMapping
-    public ResponseEntity<List<FindGoodsResponse>> findGoods() {
-        List<FindGoodsResponse> goods = goodsService.findGoods();
+    public ResponseEntity<ApiResponse<List<FindGoodsResponse>>> findGoods() {
+        List<FindGoodsResponse> response = goodsService.findGoods();
 
-        return ResponseEntity.ok(goods);
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
     @GetMapping("/{goodsId}")
-    public ResponseEntity<FindGoodsResponse> findGoods(@PathVariable Long goodsId) {
-        FindGoodsResponse goods = goodsService.findGoods(goodsId);
+    public ResponseEntity<ApiResponse<FindGoodsResponse>> findGoods(@PathVariable Long goodsId) {
+        FindGoodsResponse response = goodsService.findGoods(goodsId);
 
-        return ResponseEntity.ok(goods);
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<FindGoodsResponse>> searchGoodsByName(@RequestParam(name = "name") String name) {
-        List<FindGoodsResponse> findGoods = goodsService.searchGoodsByName(name);
+    public ResponseEntity<ApiResponse<List<FindGoodsResponse>>> searchGoodsByName(
+            @RequestParam(name = "name") String name) {
+        List<FindGoodsResponse> response = goodsService.searchGoodsByName(name);
 
-        return ResponseEntity.ok(findGoods);
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
     @PatchMapping("/{goodsId}")
-    public ResponseEntity<UpdateGoodsResponse> updateGoods(@PathVariable Long goodsId,
-                                                           @Valid @RequestBody UpdateGoodsRequest request,
-                                                           @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<UpdateGoodsResponse>> updateGoods(@PathVariable Long goodsId,
+                                                                        @Valid @RequestBody UpdateGoodsRequest request,
+                                                                        @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
         UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request.toServiceRequest());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.ok(response));
     }
 }
