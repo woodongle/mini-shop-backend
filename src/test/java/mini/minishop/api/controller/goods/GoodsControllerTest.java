@@ -132,12 +132,12 @@ class GoodsControllerTest {
         mockMvc.perform(get("/api/v1/goods"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("goods1"))
-                .andExpect(jsonPath("$[0].price").value(1000.00))
-                .andExpect(jsonPath("$[0].inventoryQuantity").value(10))
-                .andExpect(jsonPath("$[1].name").value("goods2"))
-                .andExpect(jsonPath("$[1].price").value(2000.00))
-                .andExpect(jsonPath("$[1].inventoryQuantity").value(20));
+                .andExpect(jsonPath("$.data.[0].name").value("goods1"))
+                .andExpect(jsonPath("$.data.[0].price").value(1000.00))
+                .andExpect(jsonPath("$.data.[0].inventoryQuantity").value(10))
+                .andExpect(jsonPath("$.data.[1].name").value("goods2"))
+                .andExpect(jsonPath("$.data.[1].price").value(2000.00))
+                .andExpect(jsonPath("$.data.[1].inventoryQuantity").value(20));
     }
 
     @DisplayName("상품 ID로 상품 정보를 조회한다.")
@@ -161,9 +161,9 @@ class GoodsControllerTest {
         mockMvc.perform(get("/api/v1/goods/{goodsId}", goodsId))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("goods"))
-                .andExpect(jsonPath("$.price").value(1000.00))
-                .andExpect(jsonPath("$.inventoryQuantity").value(10));
+                .andExpect(jsonPath("$.data.name").value("goods"))
+                .andExpect(jsonPath("$.data.price").value(1000.00))
+                .andExpect(jsonPath("$.data.inventoryQuantity").value(10));
     }
 
     @DisplayName("상품 이름으로 상품들을 조회한다.")
@@ -184,12 +184,12 @@ class GoodsControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("goods1"))
-                .andExpect(jsonPath("$[0].price").value(1000.00))
-                .andExpect(jsonPath("$[0].inventoryQuantity").value(10))
-                .andExpect(jsonPath("$[1].name").value("goods2"))
-                .andExpect(jsonPath("$[1].price").value(2000.00))
-                .andExpect(jsonPath("$[1].inventoryQuantity").value(20));
+                .andExpect(jsonPath("$.data.[0].name").value("goods1"))
+                .andExpect(jsonPath("$.data.[0].price").value(1000.00))
+                .andExpect(jsonPath("$.data.[0].inventoryQuantity").value(10))
+                .andExpect(jsonPath("$.data.[1].name").value("goods2"))
+                .andExpect(jsonPath("$.data.[1].price").value(2000.00))
+                .andExpect(jsonPath("$.data.[1].inventoryQuantity").value(20));
     }
 
     @DisplayName("사용자 입력으로 상품을 수정한다.")
@@ -222,9 +222,9 @@ class GoodsControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.goodsName").value("newGoodsName"))
-                .andExpect(jsonPath("$.price").value(2000.00))
-                .andExpect(jsonPath("$.inventoryQuantity").value(20));
+                .andExpect(jsonPath("$.data.goodsName").value("newGoodsName"))
+                .andExpect(jsonPath("$.data.price").value(2000.00))
+                .andExpect(jsonPath("$.data.inventoryQuantity").value(20));
     }
 
     @DisplayName("사용자 입력에 문제가 있으면 예외가 발생한다.")
