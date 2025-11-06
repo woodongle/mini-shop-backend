@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
+import mini.minishop.api.service.order.response.CreateOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.domain.delivery.Delivery;
 import mini.minishop.domain.delivery.DeliveryStatus;
@@ -29,7 +30,7 @@ public class OrderService {
     private final GoodsRepository goodsRepository;
 
     @Transactional
-    public Order createOrder(CreateOrderServiceRequest request, User user, Long goodsId) {
+    public CreateOrderResponse createOrder(CreateOrderServiceRequest request, User user, Long goodsId) {
         Delivery delivery = Delivery.builder()
                 .status(DeliveryStatus.BEFORE_DELIVERY)
                 .address(request.getAddress())
@@ -50,7 +51,9 @@ public class OrderService {
                 .quantity(request.getOrderGoodsQuantity())
                 .build();
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        return new CreateOrderResponse(savedOrder);
     }
 
     public List<FindOrderHistoryResponse> findOrderHistory(Long userId) {

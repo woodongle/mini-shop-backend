@@ -1,14 +1,17 @@
 package mini.minishop.api.controller.order;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import mini.minishop.api.ApiResponse;
 import mini.minishop.api.controller.order.request.CreateOrderRequest;
 import mini.minishop.api.service.order.OrderService;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
+import mini.minishop.api.service.order.response.CreateOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.api.service.user.UserService;
-import mini.minishop.domain.order.Order;
 import mini.minishop.domain.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,14 +33,14 @@ public class OrderController {
     private final UserService userService;
 
     @PostMapping("/{goodsId}")
-    public ResponseEntity<String> createOrder(@RequestBody @Valid CreateOrderRequest request,
-                                              @AuthenticationPrincipal UserDetails userDetails,
-                                              @PathVariable Long goodsId) {
+    public ResponseEntity<ApiResponse<CreateOrderResponse>> createOrder(@RequestBody @Valid CreateOrderRequest request,
+                                                                        @AuthenticationPrincipal UserDetails userDetails,
+                                                                        @PathVariable Long goodsId) {
 
         User user = userService.findUser(userDetails.getUsername());
-        Order createdOrder = orderService.createOrder(request.toServiceRequest(), user, goodsId);
+        CreateOrderResponse response = orderService.createOrder(request.toServiceRequest(), user, goodsId);
 
-        return ResponseEntity.ok("상품 주문이 완료되었습니다.");
+        return ResponseEntity.status(CREATED).body(ApiResponse.created("상품 주문이 완료되었습니다.", response));
     }
 
     @GetMapping("/{userId}/orders")
