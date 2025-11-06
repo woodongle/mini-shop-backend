@@ -2,6 +2,7 @@ package mini.minishop.api.service.goods.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import mini.minishop.domain.goods.Goods;
@@ -20,8 +21,9 @@ public class FindGoodsResponse {
                 goods.getModifiedDate());
     }
 
-    private FindGoodsResponse(Long id, String name, BigDecimal price, int inventoryQuantity,
-                              LocalDateTime modifiedDate) {
+    @Builder
+    public FindGoodsResponse(Long id, String name, BigDecimal price, int inventoryQuantity,
+                             LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.price = price;
