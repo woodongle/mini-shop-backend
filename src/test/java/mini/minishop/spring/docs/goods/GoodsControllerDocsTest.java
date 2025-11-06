@@ -3,6 +3,7 @@ package mini.minishop.spring.docs.goods;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -40,7 +41,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -88,7 +88,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(post("/api/v1/goods")
                         .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andDo(print())
@@ -154,7 +154,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
         given(goodsService.findGoods()).willReturn(responses);
 
         mockMvc.perform(get("/api/v1/goods")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
@@ -180,6 +180,52 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량"),
                                 fieldWithPath("data[].modifiedDate").type(STRING)
+                                        .description("상품 변경일")
+                        )
+                ));
+    }
+
+    @DisplayName("특정 상품을 조회하는 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
+    @Test
+    void findGoodsOnlyOne() throws Exception {
+        FindGoodsResponse mockGoods = FindGoodsResponse.builder()
+                .id(1L)
+                .name("goods1")
+                .price(new BigDecimal("1000.00"))
+                .inventoryQuantity(100)
+                .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
+                .build();
+
+        given(goodsService.findGoods(mockGoods.getId())).willReturn(mockGoods);
+
+        mockMvc.perform(get("/api/v1/goods/{goodsId}", mockGoods.getId())
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andDo(document("goods-find-only-one",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드"),
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.id").type(NUMBER)
+                                        .description("상품 ID"),
+                                fieldWithPath("data.name").type(STRING)
+                                        .description("상품 이름"),
+                                fieldWithPath("data.price").type(NUMBER)
+                                        .description("상품 가격"),
+                                fieldWithPath("data.inventoryQuantity").type(NUMBER)
+                                        .description("상품 재고 수량"),
+                                fieldWithPath("data.modifiedDate").type(STRING)
                                         .description("상품 변경일")
                         )
                 ));
