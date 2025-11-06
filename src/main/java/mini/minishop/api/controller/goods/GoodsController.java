@@ -40,7 +40,7 @@ public class GoodsController {
         User user = userService.findUser(userDetails.getUsername());
         CreateGoodsResponse response = goodsService.createGoods(request.toServiceRequest(), user);
 
-        return ResponseEntity.status(CREATED).body(ApiResponse.create("상품 등록이 완료되었습니다.", response));
+        return ResponseEntity.status(CREATED).body(ApiResponse.created("상품 등록이 완료되었습니다.", response));
     }
 
     @GetMapping

@@ -30,7 +30,7 @@ public class ApiResponse<T> {
         return of(HttpStatus.OK, HttpStatus.OK.name(), data);
     }
 
-    public static <T> ApiResponse<T> create(String message, T data) {
+    public static <T> ApiResponse<T> created(String message, T data) {
         return of(HttpStatus.CREATED, message, data);
     }
 }
