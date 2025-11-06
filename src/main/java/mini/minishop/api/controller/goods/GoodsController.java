@@ -1,17 +1,19 @@
 package mini.minishop.api.controller.goods;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import mini.minishop.api.ApiResponse;
 import mini.minishop.api.controller.goods.request.CreateGoodsRequest;
 import mini.minishop.api.controller.goods.request.UpdateGoodsRequest;
 import mini.minishop.api.service.goods.GoodsService;
+import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.api.service.user.UserService;
-import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.user.User;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,12 +35,12 @@ public class GoodsController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<String> createGoods(@RequestBody @Valid CreateGoodsRequest request,
-                                              @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<CreateGoodsResponse>> createGoods(@RequestBody @Valid CreateGoodsRequest request,
+                                                                        @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
-        Goods goods = goodsService.createGoods(request.toServiceRequest(), user);
+        CreateGoodsResponse goodsResponse = goodsService.createGoods(request.toServiceRequest(), user);
 
-        return new ResponseEntity<>("상품 등록이 완료되었습니다.", HttpStatus.CREATED);
+        return ResponseEntity.status(CREATED).body(ApiResponse.create("상품 등록이 완료되었습니다.", goodsResponse));
     }
 
     @GetMapping

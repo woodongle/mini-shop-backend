@@ -5,6 +5,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.api.service.goods.request.CreateGoodsServiceRequest;
 import mini.minishop.api.service.goods.request.UpdateGoodsServiceRequest;
+import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.domain.goods.Goods;
@@ -23,10 +24,18 @@ public class GoodsService {
     private final GoodsRepository goodsRepository;
 
     @Transactional
-    public Goods createGoods(CreateGoodsServiceRequest request, User user) {
+    public CreateGoodsResponse createGoods(CreateGoodsServiceRequest request, User user) {
         Goods goods = request.toEntity(user);
 
-        return goodsRepository.save(goods);
+        Goods savedGoods = goodsRepository.save(goods);
+
+        return CreateGoodsResponse.builder()
+                .goodsId(savedGoods.getId())
+                .goodsName(savedGoods.getName())
+                .price(savedGoods.getPrice())
+                .inventoryQuantity(savedGoods.getInventoryQuantity())
+                .createDate(savedGoods.getCreatedDate())
+                .build();
     }
 
     public List<FindGoodsResponse> findGoods() {
