@@ -12,15 +12,15 @@ import mini.minishop.domain.order.OrderStatus;
 public class CancelOrderResponse {
     private Long orderId;
     private OrderStatus orderStatus;
-    private LocalDateTime orderCreatedDate;
-    private LocalDateTime orderCanceledDate;
+    private LocalDateTime orderedDate;
+    private LocalDateTime canceledDate;
     private List<OrderGoodsResponse> orderGoods;
 
     public CancelOrderResponse(Order order) {
         this.orderId = order.getId();
         this.orderStatus = order.getStatus();
-        this.orderCreatedDate = order.getCreatedDate();
-        this.orderCanceledDate = order.getCanceledDate();
+        this.orderedDate = order.getCreatedDate();
+        this.canceledDate = order.getCanceledDate();
         this.orderGoods = order.getOrderGoods().stream()
                 .map(OrderGoodsResponse::new)
                 .toList();

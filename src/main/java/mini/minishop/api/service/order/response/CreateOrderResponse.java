@@ -10,12 +10,12 @@ import mini.minishop.domain.order.Order;
 @Setter
 public class CreateOrderResponse {
     private Long orderId;
-    private LocalDateTime orderDate;
+    private LocalDateTime orderedDate;
     private List<OrderGoodsResponse> orderGoods;
 
     public CreateOrderResponse(Order order) {
         this.orderId = order.getId();
-        this.orderDate = order.getCreatedDate();
+        this.orderedDate = order.getCreatedDate();
         this.orderGoods = order.getOrderGoods().stream()
                 .map(OrderGoodsResponse::new)
                 .toList();
