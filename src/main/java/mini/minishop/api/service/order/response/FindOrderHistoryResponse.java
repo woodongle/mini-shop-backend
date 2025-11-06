@@ -12,13 +12,15 @@ import mini.minishop.domain.order.OrderStatus;
 public class FindOrderHistoryResponse {
     private Long orderId;
     private OrderStatus orderStatus;
-    private LocalDateTime orderDate;
+    private LocalDateTime orderedDate;
+    private LocalDateTime canceledOrderDate;
     private List<OrderGoodsResponse> orderGoods;
 
     public FindOrderHistoryResponse(Order order) {
         this.orderId = order.getId();
         this.orderStatus = order.getStatus();
-        this.orderDate = order.getCreatedDate();
+        this.orderedDate = order.getCreatedDate();
+        this.canceledOrderDate = order.getCanceledDate();
         this.orderGoods = order.getOrderGoods().stream()
                 .map(OrderGoodsResponse::new)
                 .toList();
