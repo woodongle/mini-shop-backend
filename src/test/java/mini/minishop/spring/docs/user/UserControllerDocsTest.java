@@ -1,7 +1,11 @@
 package mini.minishop.spring.docs.user;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -21,8 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
 import mini.minishop.api.controller.user.UserController;
 import mini.minishop.api.controller.user.request.CreateUserRequest;
+import mini.minishop.api.controller.user.request.LoginRequest;
 import mini.minishop.api.service.user.RefreshTokenService;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.api.service.user.response.FindUserResponse;
@@ -35,7 +41,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -54,6 +63,9 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
     @MockitoBean
     private AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    @MockitoBean
+    AuthenticationManager authenticationManager;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
@@ -143,4 +155,58 @@ public class UserControllerDocsTest extends RestDocsSupport {
                         )
                 ));
     }
+
+    @DisplayName("로그인 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
+    @Test
+    void login() throws Exception {
+        LoginRequest request = LoginRequest.builder()
+                .email("user@user.com")
+                .password("user")
+                .build();
+
+        String accessToken = "test.access.token";
+        String refreshToken = "test.refresh.token";
+
+        User mockUser = mock(User.class);
+        given(mockUser.getId()).willReturn(1L);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(mockUser, "User",
+                Collections.emptyList());
+
+        given(authenticationManagerBuilder.getObject())
+                .willReturn(authenticationManager);
+        given(authenticationManager.authenticate(any()))
+                .willReturn(authentication);
+        given(jwtTokenProvider.generateAccessToken(authentication))
+                .willReturn(accessToken);
+        given(jwtTokenProvider.generateRefreshToken(authentication))
+                .willReturn(refreshToken);
+        doNothing().when(refreshTokenService).saveOrUpdate(anyLong(), anyString());
+
+        mockMvc.perform(post("/api/v1/users/login")
+                        .with(csrf())
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user/user-login",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").type(STRING)
+                                        .description("사용자 이메일"),
+                                fieldWithPath("password").type(STRING)
+                                        .description("사용자 비밀번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("accessToken").type(STRING)
+                                        .description("액세스 토큰"),
+                                fieldWithPath("refreshToken").type(STRING)
+                                        .description("리프레시 토큰")
+                        )
+                ));
+    }
+
 }

@@ -23,3 +23,4 @@ include::api/goods/goods-update.adoc[]
 
 include::api/user/user-create.adoc[]
 include::api/user/user-find-only-one.adoc[]
+include::api/user/user-login.adoc[]
