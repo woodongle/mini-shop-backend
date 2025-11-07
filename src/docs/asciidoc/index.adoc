@@ -22,3 +22,4 @@ include::api/goods/goods-update.adoc[]
 == User API
 
 include::api/user/user-create.adoc[]
+include::api/user/user-find-only-one.adoc[]

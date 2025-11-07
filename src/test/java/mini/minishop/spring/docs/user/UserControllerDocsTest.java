@@ -4,14 +4,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.OBJECT;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -21,6 +25,7 @@ import mini.minishop.api.controller.user.UserController;
 import mini.minishop.api.controller.user.request.CreateUserRequest;
 import mini.minishop.api.service.user.RefreshTokenService;
 import mini.minishop.api.service.user.UserService;
+import mini.minishop.api.service.user.response.FindUserResponse;
 import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.config.JwtTokenProvider;
 import mini.minishop.domain.user.User;
@@ -95,6 +100,47 @@ public class UserControllerDocsTest extends RestDocsSupport {
                                         .description("비밀번호")
                         ),
                         responseBody()
+                ));
+    }
+
+    @DisplayName("특정 사용자를 조회하는 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
+    @Test
+    void findUser() throws Exception {
+        Long mockUserId = 1L;
+        given(userService.findUser(mockUserId))
+                .willReturn(FindUserResponse.builder()
+                        .userId(mockUserId)
+                        .username("user")
+                        .userEmail("user@user.com")
+                        .build());
+
+        mockMvc.perform(get("/api/v1/users/{userId}", mockUserId)
+                        .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andDo(document("user/user-find-only-one",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드"),
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.userId").type(NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("data.username").type(STRING)
+                                        .description("사용자 이름"),
+                                fieldWithPath("data.userEmail").type(STRING)
+                                        .description("사용자 이메일")
+                        )
                 ));
     }
 }

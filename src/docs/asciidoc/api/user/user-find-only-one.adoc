@@ -1,0 +1,11 @@
+[[user-update]]
+=== 특정 회원 조회
+
+==== HTTP Request
+
+include::{snippets}/user/user-find-only-one/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user/user-find-only-one/http-response.adoc[]
+include::{snippets}/user/user-find-only-one/response-fields.adoc[]
