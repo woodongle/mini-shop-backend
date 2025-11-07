@@ -35,6 +35,7 @@ import mini.minishop.api.service.user.response.FindUserResponse;
 import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.config.JwtTokenProvider;
 import mini.minishop.domain.user.User;
+import mini.minishop.domain.user.UserRole;
 import mini.minishop.spring.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -208,5 +209,35 @@ public class UserControllerDocsTest extends RestDocsSupport {
                         )
                 ));
     }
+
+    @DisplayName("로그아웃 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
+    @Test
+    void logout() throws Exception {
+        User mockUser = User.builder()
+                .email("user@user.com")
+                .role(UserRole.USER)
+                .build();
+
+        given(userService.findUser(mockUser.getEmail()))
+                .willReturn(mockUser);
+        doNothing().when(refreshTokenService).logout(mockUser);
+
+        mockMvc.perform(post("/api/v1/users/logout")
+                        .with(csrf())
+                        .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("로그아웃 되었습니다."))
+                .andDo(document("user/user-logout",
+                        preprocessRequest(),
+                        preprocessResponse(),
+                        responseBody()
+                ));
+    }
+
 
 }
