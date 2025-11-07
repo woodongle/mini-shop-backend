@@ -53,9 +53,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest LoginRequest) {
+    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(
-                new UsernamePasswordAuthenticationToken(LoginRequest.getEmail(), LoginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
 
         String accessToken = jwtTokenProvider.generateAccessToken(authentication);
@@ -76,8 +76,8 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refresh(@RequestBody TokenRefreshRequest TokenRefreshRequest) {
-        String requestRefreshToken = TokenRefreshRequest.getRefreshToken();
+    public ResponseEntity<TokenResponse> refresh(@RequestBody TokenRefreshRequest tokenRefreshRequest) {
+        String requestRefreshToken = tokenRefreshRequest.getRefreshToken();
         jwtTokenProvider.validateToken(requestRefreshToken);
 
         RefreshToken refreshToken = refreshTokenService.findByToken(requestRefreshToken);
