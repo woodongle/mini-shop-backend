@@ -1,5 +1,6 @@
 package mini.minishop.api.service.user.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import mini.minishop.domain.user.User;
@@ -15,6 +16,7 @@ public class FindUserResponse {
         return new FindUserResponse(user.getId(), user.getName(), user.getEmail());
     }
 
+    @Builder
     private FindUserResponse(Long userId, String username, String userEmail) {
         this.userId = userId;
         this.username = username;
