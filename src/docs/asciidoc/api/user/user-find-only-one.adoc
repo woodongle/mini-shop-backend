@@ -1,4 +1,4 @@
-[[user-update]]
+[[user-find-only-one]]
 === 특정 회원 조회
 
 ==== HTTP Request

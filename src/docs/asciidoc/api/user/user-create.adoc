@@ -1,4 +1,4 @@
-[[user-update]]
+[[user-create]]
 === 회원 가입
 
 ==== HTTP Request
