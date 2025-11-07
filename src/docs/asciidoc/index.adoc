@@ -26,3 +26,8 @@ include::api/user/user-find-only-one.adoc[]
 include::api/user/user-login.adoc[]
 include::api/user/user-logout.adoc[]
 include::api/user/user-refresh.adoc[]
+
+[[Order-API]]
+== Order API
+
+include::api/order/order-create.adoc[]

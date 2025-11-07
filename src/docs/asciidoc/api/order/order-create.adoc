@@ -1,0 +1,12 @@
+[[order-create]]
+=== 상품 주문
+
+==== HTTP Request
+
+include::{snippets}/order/order-create/http-request.adoc[]
+include::{snippets}/order/order-create/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/order/order-create/http-response.adoc[]
+include::{snippets}/order/order-create/response-fields.adoc[]
