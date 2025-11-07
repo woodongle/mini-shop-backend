@@ -1,0 +1,12 @@
+[[user-refresh]]
+=== 리프레쉬 토큰으로 액세스 토큰과 리프레쉬 토큰을 재발급
+
+==== HTTP Request
+
+include::{snippets}/user/user-refresh/http-request.adoc[]
+include::{snippets}/user/user-refresh/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user/user-refresh/http-response.adoc[]
+include::{snippets}/user/user-refresh/response-fields.adoc[]

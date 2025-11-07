@@ -35,6 +35,7 @@ import mini.minishop.api.service.user.UserService;
 import mini.minishop.api.service.user.response.FindUserResponse;
 import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.config.JwtTokenProvider;
+import mini.minishop.domain.user.RefreshToken;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRole;
 import mini.minishop.spring.docs.RestDocsSupport;
@@ -240,11 +241,61 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
-    @DisplayName("리프레쉬 토큰으로 액세스 토큰을 재발급하는 API")
+    @DisplayName("리프레쉬 토큰으로 액세스 토큰과 리프레쉬 토큰을 재발급하는 API")
+    @WithMockUser(username = "user@user.com", roles = "USER")
     @Test
-    void refresh() {
+    void refresh() throws Exception {
+        String requestRefreshToken = "request_refresh_token";
+        String newAccessToken = "new_access_token";
+        String newRefreshToken = "new_refresh_token";
+
         TokenRefreshRequest request = new TokenRefreshRequest();
-        request.setRefreshToken("oldRefreshToken");
+        request.setRefreshToken(requestRefreshToken);
+
+        User mockUser = User.builder()
+                .email("user@user.com")
+                .role(UserRole.USER)
+                .build();
+        RefreshToken mockRefreshToken = mock(RefreshToken.class);
+
+        given(jwtTokenProvider.validateToken(anyString()))
+                .willReturn(true);
+        given(refreshTokenService.findByToken(requestRefreshToken))
+                .willReturn(mockRefreshToken);
+        given(mockRefreshToken.getToken())
+                .willReturn(requestRefreshToken);
+        given(jwtTokenProvider.getEmailFromToken(requestRefreshToken))
+                .willReturn(mockUser.getEmail());
+        given(userService.findUser(anyString()))
+                .willReturn(mockUser);
+        given(jwtTokenProvider.generateAccessToken(any(Authentication.class)))
+                .willReturn(newAccessToken);
+        given(jwtTokenProvider.generateRefreshToken(any(Authentication.class)))
+                .willReturn(newRefreshToken);
+        doNothing().when(mockRefreshToken).updateToken(anyString());
+
+        mockMvc.perform(post("/api/v1/users/refresh")
+                        .with(csrf())
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("/user/user-refresh",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("refreshToken").type(STRING)
+                                        .description("기존 리프레쉬 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("accessToken").type(STRING)
+                                        .description("새로운 액세스 토큰"),
+                                fieldWithPath("refreshToken").type(STRING)
+                                        .description("새로운 리프레쉬 토큰")
+                        )
+                ));
+
     }
 
 
