@@ -123,9 +123,10 @@ class UserControllerTest {
         em.flush();
         em.clear();
 
-        LoginRequest request = new LoginRequest();
-        request.setEmail("user@user.com");
-        request.setPassword("user");
+        LoginRequest request = LoginRequest.builder()
+                .email("user@user.com")
+                .password("user")
+                .build();
 
         // when // then
         mockMvc.perform(post("/api/v1/users/login")
@@ -147,9 +148,10 @@ class UserControllerTest {
         em.flush();
         em.clear();
 
-        LoginRequest request = new LoginRequest();
-        request.setEmail("");
-        request.setPassword("user");
+        LoginRequest request = LoginRequest.builder()
+                .email("")
+                .password("user")
+                .build();
 
         // when // then
         mockMvc.perform(post("/api/v1/users/login")
