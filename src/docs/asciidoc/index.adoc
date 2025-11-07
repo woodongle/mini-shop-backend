@@ -17,3 +17,8 @@ include::api/goods/goods-find-all.adoc[]
 include::api/goods/goods-find-only-one.adoc[]
 include::api/goods/goods-search.adoc[]
 include::api/goods/goods-update.adoc[]
+
+[[User-API]]
+== User API
+
+include::api/user/user-create.adoc[]
