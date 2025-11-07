@@ -3,10 +3,10 @@
 
 ==== HTTP Request
 
-include::{snippets}/goods-update/http-request.adoc[]
-include::{snippets}/goods-update/request-fields.adoc[]
+include::{snippets}/goods/goods-update/http-request.adoc[]
+include::{snippets}/goods/goods-update/request-fields.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/goods-update/http-response.adoc[]
-include::{snippets}/goods-update/response-fields.adoc[]
+include::{snippets}/goods/goods-update/http-response.adoc[]
+include::{snippets}/goods/goods-update/response-fields.adoc[]

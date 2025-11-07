@@ -99,7 +99,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("201"))
                 .andExpect(jsonPath("$.status").value("CREATED"))
                 .andExpect(jsonPath("$.message").value("상품 등록이 완료되었습니다."))
-                .andDo(document("goods-create",
+                .andDo(document("goods/goods-create",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -162,7 +162,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("goods-find-all",
+                .andDo(document("goods/goods-find-all",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
@@ -208,7 +208,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("goods-find-only-one",
+                .andDo(document("goods/goods-find-only-one",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
@@ -264,7 +264,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("goods-search",
+                .andDo(document("goods/goods-search",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
@@ -326,7 +326,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("goods-update",
+                .andDo(document("goods/goods-update",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(

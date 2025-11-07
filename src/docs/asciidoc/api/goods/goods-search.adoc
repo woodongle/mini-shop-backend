@@ -3,9 +3,9 @@
 
 ==== HTTP Request
 
-include::{snippets}/goods-search/http-request.adoc[]
+include::{snippets}/goods/goods-search/http-request.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/goods-search/http-response.adoc[]
-include::{snippets}/goods-search/response-fields.adoc[]
+include::{snippets}/goods/goods-search/http-response.adoc[]
+include::{snippets}/goods/goods-search/response-fields.adoc[]

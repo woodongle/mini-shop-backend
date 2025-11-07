@@ -3,9 +3,9 @@
 
 ==== HTTP Request
 
-include::{snippets}/goods-find-only-one/http-request.adoc[]
+include::{snippets}/goods/goods-find-only-one/http-request.adoc[]
 
 ==== HTTP Response
 
-include::{snippets}/goods-find-only-one/http-response.adoc[]
-include::{snippets}/goods-find-only-one/response-fields.adoc[]
+include::{snippets}/goods/goods-find-only-one/http-response.adoc[]
+include::{snippets}/goods/goods-find-only-one/response-fields.adoc[]
