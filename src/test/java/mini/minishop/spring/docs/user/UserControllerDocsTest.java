@@ -29,6 +29,7 @@ import java.util.Collections;
 import mini.minishop.api.controller.user.UserController;
 import mini.minishop.api.controller.user.request.CreateUserRequest;
 import mini.minishop.api.controller.user.request.LoginRequest;
+import mini.minishop.api.controller.user.request.TokenRefreshRequest;
 import mini.minishop.api.service.user.RefreshTokenService;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.api.service.user.response.FindUserResponse;
@@ -166,8 +167,8 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .password("user")
                 .build();
 
-        String accessToken = "test.access.token";
-        String refreshToken = "test.refresh.token";
+        String accessToken = "test_access_token";
+        String refreshToken = "test_refresh_token";
 
         User mockUser = mock(User.class);
         given(mockUser.getId()).willReturn(1L);
@@ -237,6 +238,13 @@ public class UserControllerDocsTest extends RestDocsSupport {
                         preprocessResponse(),
                         responseBody()
                 ));
+    }
+
+    @DisplayName("리프레쉬 토큰으로 액세스 토큰을 재발급하는 API")
+    @Test
+    void refresh() {
+        TokenRefreshRequest request = new TokenRefreshRequest();
+        request.setRefreshToken("oldRefreshToken");
     }
 
 
