@@ -1,6 +1,7 @@
 package mini.minishop.api.service.order.response;
 
 import java.math.BigDecimal;
+import lombok.Builder;
 import lombok.Getter;
 import mini.minishop.domain.ordergoods.OrderGoods;
 
@@ -14,5 +15,12 @@ public class OrderGoodsResponse {
         this.goodsName = orderGoods.getGoods().getName();
         this.quantity = orderGoods.getQuantity();
         this.paymentAmount = orderGoods.getPaymentAmount();
+    }
+
+    @Builder
+    public OrderGoodsResponse(String goodsName, int quantity, BigDecimal paymentAmount) {
+        this.goodsName = goodsName;
+        this.quantity = quantity;
+        this.paymentAmount = paymentAmount;
     }
 }
