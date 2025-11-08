@@ -32,3 +32,4 @@ include::api/user/user-refresh.adoc[]
 
 include::api/order/order-create.adoc[]
 include::api/order/order-find-history.adoc[]
+include::api/order/order-cancel.adoc[]

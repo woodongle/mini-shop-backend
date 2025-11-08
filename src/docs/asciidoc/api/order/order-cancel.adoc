@@ -1,0 +1,11 @@
+[[order-cancel]]
+=== 주문 취소
+
+==== HTTP Request
+
+include::{snippets}/order/order-cancel/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/order/order-cancel/http-response.adoc[]
+include::{snippets}/order/order-cancel/response-fields.adoc[]
