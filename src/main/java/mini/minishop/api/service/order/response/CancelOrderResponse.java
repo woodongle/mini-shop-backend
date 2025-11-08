@@ -2,6 +2,7 @@ package mini.minishop.api.service.order.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import mini.minishop.domain.order.Order;
@@ -24,5 +25,16 @@ public class CancelOrderResponse {
         this.orderGoods = order.getOrderGoods().stream()
                 .map(OrderGoodsResponse::new)
                 .toList();
+    }
+
+    @Builder
+    public CancelOrderResponse(Long orderId, OrderStatus orderStatus, LocalDateTime orderedDate,
+                               LocalDateTime canceledDate,
+                               List<OrderGoodsResponse> orderGoods) {
+        this.orderId = orderId;
+        this.orderStatus = orderStatus;
+        this.orderedDate = orderedDate;
+        this.canceledDate = canceledDate;
+        this.orderGoods = orderGoods;
     }
 }
