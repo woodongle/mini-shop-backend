@@ -31,3 +31,4 @@ include::api/user/user-refresh.adoc[]
 == Order API
 
 include::api/order/order-create.adoc[]
+include::api/order/order-find-history.adoc[]
