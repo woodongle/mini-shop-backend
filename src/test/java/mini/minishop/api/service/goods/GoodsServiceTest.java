@@ -124,7 +124,7 @@ class GoodsServiceTest {
         em.clear();
 
         // when
-        FindGoodsResponse foundGoods = goodsService.findGoods(goods1.getId());
+        FindGoodsResponse foundGoods = goodsService.findGoodsByGoodsId(goods1.getId());
 
         // then
         assertThat(foundGoods).extracting("name", "price", "inventoryQuantity")
@@ -148,7 +148,7 @@ class GoodsServiceTest {
         // when // then
         assertThatThrownBy(() -> {
             long nonExistGoodsId = 0L;
-            goodsService.findGoods(nonExistGoodsId);
+            goodsService.findGoodsByGoodsId(nonExistGoodsId);
         })
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("존재하지 않는 상품입니다.");

@@ -191,7 +191,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
     @DisplayName("특정 상품을 조회하는 API")
     @WithMockUser(username = "user@user.com", roles = "USER")
     @Test
-    void findGoodsOnlyOne() throws Exception {
+    void findGoodsByGoodsId() throws Exception {
         FindGoodsResponse mockGoods = FindGoodsResponse.builder()
                 .id(1L)
                 .name("goods1")
@@ -200,7 +200,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
                 .build();
 
-        given(goodsService.findGoods(mockGoods.getId())).willReturn(mockGoods);
+        given(goodsService.findGoodsByGoodsId(mockGoods.getId())).willReturn(mockGoods);
 
         mockMvc.perform(get("/api/v1/goods/{goodsId}", mockGoods.getId())
                         .contentType(APPLICATION_JSON))
@@ -208,7 +208,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("goods/goods-find-only-one",
+                .andDo(document("goods/goods-find-by-goods-id",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
