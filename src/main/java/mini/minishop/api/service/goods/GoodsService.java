@@ -46,7 +46,7 @@ public class GoodsService {
                 .toList();
     }
 
-    public FindGoodsResponse findGoods(Long goodsId) {
+    public FindGoodsResponse findGoodsByGoodsId(Long goodsId) {
         Optional<Goods> findGoods = goodsRepository.findById(goodsId);
         Goods goods = findGoods.orElseThrow(
                 () -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND)

@@ -51,8 +51,8 @@ public class GoodsController {
     }
 
     @GetMapping("/{goodsId}")
-    public ResponseEntity<ApiResponse<FindGoodsResponse>> findGoods(@PathVariable Long goodsId) {
-        FindGoodsResponse response = goodsService.findGoods(goodsId);
+    public ResponseEntity<ApiResponse<FindGoodsResponse>> findGoodsByGoodsId(@PathVariable Long goodsId) {
+        FindGoodsResponse response = goodsService.findGoodsByGoodsId(goodsId);
 
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
