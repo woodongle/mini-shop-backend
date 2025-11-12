@@ -91,14 +91,10 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .orderGoods(List.of(goods1, goods2))
                 .build();
 
-        User mockUser = mock(User.class);
-
         String mockUserEmail = "user@user.com";
         Long mockGoodsId = 1L;
 
-        given(userService.findUser(mockUserEmail))
-                .willReturn(mockUser);
-        given(orderService.createOrder(any(CreateOrderServiceRequest.class), eq(mockUser), eq(mockGoodsId)))
+        given(orderService.createOrder(any(CreateOrderServiceRequest.class), eq(mockUserEmail), eq(mockGoodsId)))
                 .willReturn(response);
 
         mockMvc.perform(post("/api/v1/order/{goodsId}", mockGoodsId)
@@ -253,7 +249,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
         given(user.getId()).willReturn(mockUserId);
         given(userService.findUser(mockUserEmail))
                 .willReturn(user);
-        given(orderService.cancelOrder(mockOrderId, mockUserId))
+        given(orderService.cancelOrder(mockOrderId, mockUserEmail))
                 .willReturn(response);
 
         mockMvc.perform(patch("/api/v1/order/{orderId}/cancel", mockOrderId)

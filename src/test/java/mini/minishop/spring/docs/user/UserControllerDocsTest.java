@@ -1,11 +1,8 @@
 package mini.minishop.spring.docs.user;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -25,17 +22,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Collections;
 import mini.minishop.api.controller.user.UserController;
 import mini.minishop.api.controller.user.request.CreateUserRequest;
 import mini.minishop.api.controller.user.request.LoginRequest;
 import mini.minishop.api.controller.user.request.TokenRefreshRequest;
-import mini.minishop.api.service.user.RefreshTokenService;
+import mini.minishop.api.service.auth.AuthService;
+import mini.minishop.api.service.auth.RefreshTokenService;
+import mini.minishop.api.service.auth.request.LoginServiceRequest;
+import mini.minishop.api.service.auth.response.TokenResponse;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.api.service.user.response.FindUserResponse;
 import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.config.JwtTokenProvider;
-import mini.minishop.domain.user.RefreshToken;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRole;
 import mini.minishop.spring.docs.RestDocsSupport;
@@ -45,9 +43,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -68,13 +64,16 @@ public class UserControllerDocsTest extends RestDocsSupport {
     private AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @MockitoBean
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @MockitoBean
     private JwtTokenProvider jwtTokenProvider;
 
     @MockitoBean
     private RefreshTokenService refreshTokenService;
+
+    @MockitoBean
+    private AuthService authService;
 
     @DisplayName("회원을 등록하는 API")
     @WithMockUser(username = "user@user.com", roles = "USER")
@@ -171,21 +170,8 @@ public class UserControllerDocsTest extends RestDocsSupport {
         String accessToken = "test_access_token";
         String refreshToken = "test_refresh_token";
 
-        User mockUser = mock(User.class);
-        given(mockUser.getId()).willReturn(1L);
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(mockUser, "User",
-                Collections.emptyList());
-
-        given(authenticationManagerBuilder.getObject())
-                .willReturn(authenticationManager);
-        given(authenticationManager.authenticate(any()))
-                .willReturn(authentication);
-        given(jwtTokenProvider.generateAccessToken(authentication))
-                .willReturn(accessToken);
-        given(jwtTokenProvider.generateRefreshToken(authentication))
-                .willReturn(refreshToken);
-        doNothing().when(refreshTokenService).saveOrUpdate(anyLong(), anyString());
+        given(authService.login(any(LoginServiceRequest.class)))
+                .willReturn(new TokenResponse(accessToken, refreshToken));
 
         mockMvc.perform(post("/api/v1/users/login")
                         .with(csrf())
@@ -223,7 +209,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
 
         given(userService.findUser(mockUser.getEmail()))
                 .willReturn(mockUser);
-        doNothing().when(refreshTokenService).logout(mockUser);
+        doNothing().when(refreshTokenService).logout(mockUser.getEmail());
 
         mockMvc.perform(post("/api/v1/users/logout")
                         .with(csrf())
@@ -252,27 +238,8 @@ public class UserControllerDocsTest extends RestDocsSupport {
         TokenRefreshRequest request = new TokenRefreshRequest();
         request.setRefreshToken(requestRefreshToken);
 
-        User mockUser = User.builder()
-                .email("user@user.com")
-                .role(UserRole.USER)
-                .build();
-        RefreshToken mockRefreshToken = mock(RefreshToken.class);
-
-        given(jwtTokenProvider.validateToken(anyString()))
-                .willReturn(true);
-        given(refreshTokenService.findByToken(requestRefreshToken))
-                .willReturn(mockRefreshToken);
-        given(mockRefreshToken.getToken())
-                .willReturn(requestRefreshToken);
-        given(jwtTokenProvider.getEmailFromToken(requestRefreshToken))
-                .willReturn(mockUser.getEmail());
-        given(userService.findUser(anyString()))
-                .willReturn(mockUser);
-        given(jwtTokenProvider.generateAccessToken(any(Authentication.class)))
-                .willReturn(newAccessToken);
-        given(jwtTokenProvider.generateRefreshToken(any(Authentication.class)))
-                .willReturn(newRefreshToken);
-        doNothing().when(mockRefreshToken).updateToken(anyString());
+        given(authService.refresh(any(TokenRefreshRequest.class)))
+                .willReturn(new TokenResponse(newAccessToken, newRefreshToken));
 
         mockMvc.perform(post("/api/v1/users/refresh")
                         .with(csrf())

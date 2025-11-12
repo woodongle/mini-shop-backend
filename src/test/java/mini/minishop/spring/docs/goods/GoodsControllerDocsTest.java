@@ -80,7 +80,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .inventoryQuantity(100)
                 .build();
 
-        given(goodsService.createGoods(any(CreateGoodsServiceRequest.class), eq(mockUser)))
+        given(goodsService.createGoods(any(CreateGoodsServiceRequest.class), eq(mockUser.getEmail())))
                 .willReturn(CreateGoodsResponse.builder()
                         .goodsId(1L)
                         .goodsName(request.getName())
@@ -315,7 +315,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .modifiedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
                 .build();
 
-        given(goodsService.updateGoods(eq(response.getGoodsId()), eq(mockUser.getId()), any()))
+        given(goodsService.updateGoods(eq(response.getGoodsId()), eq(mockUser.getEmail()), any()))
                 .willReturn(response);
 
         mockMvc.perform(patch("/api/v1/goods/{goodsId}", response.getGoodsId())
