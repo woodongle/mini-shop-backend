@@ -51,12 +51,15 @@ public class GoodsService {
     }
 
     public FindGoodsResponse findGoodsByGoodsId(Long goodsId) {
+        return FindGoodsResponse.of(findGoodsEntityByGoodsId(goodsId));
+    }
+
+    public Goods findGoodsEntityByGoodsId(Long goodsId) {
         Optional<Goods> findGoods = goodsRepository.findById(goodsId);
-        Goods goods = findGoods.orElseThrow(
+
+        return findGoods.orElseThrow(
                 () -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND)
         );
-
-        return FindGoodsResponse.of(goods);
     }
 
     @Transactional
