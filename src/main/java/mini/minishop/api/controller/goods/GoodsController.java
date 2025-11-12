@@ -14,7 +14,6 @@ import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.domain.user.User;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -34,44 +34,45 @@ public class GoodsController {
     private final GoodsService goodsService;
     private final UserService userService;
 
+    @ResponseStatus(CREATED)
     @PostMapping
-    public ResponseEntity<ApiResponse<CreateGoodsResponse>> createGoods(@RequestBody @Valid CreateGoodsRequest request,
-                                                                        @AuthenticationPrincipal UserDetails userDetails) {
+    public ApiResponse<CreateGoodsResponse> createGoods(@RequestBody @Valid CreateGoodsRequest request,
+                                                        @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
         CreateGoodsResponse response = goodsService.createGoods(request.toServiceRequest(), user);
 
-        return ResponseEntity.status(CREATED).body(ApiResponse.created("상품 등록이 완료되었습니다.", response));
+        return ApiResponse.created("상품 등록이 완료되었습니다.", response);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<FindGoodsResponse>>> findGoods() {
+    public ApiResponse<List<FindGoodsResponse>> findGoods() {
         List<FindGoodsResponse> response = goodsService.findGoods();
 
-        return ResponseEntity.ok(ApiResponse.ok(response));
+        return ApiResponse.ok(response);
     }
 
     @GetMapping("/{goodsId}")
-    public ResponseEntity<ApiResponse<FindGoodsResponse>> findGoodsByGoodsId(@PathVariable Long goodsId) {
+    public ApiResponse<FindGoodsResponse> findGoodsByGoodsId(@PathVariable Long goodsId) {
         FindGoodsResponse response = goodsService.findGoodsByGoodsId(goodsId);
 
-        return ResponseEntity.ok(ApiResponse.ok(response));
+        return ApiResponse.ok(response);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<FindGoodsResponse>>> searchGoodsByName(
+    public ApiResponse<List<FindGoodsResponse>> searchGoodsByName(
             @RequestParam(name = "name") String name) {
         List<FindGoodsResponse> response = goodsService.searchGoodsByName(name);
 
-        return ResponseEntity.ok(ApiResponse.ok(response));
+        return ApiResponse.ok(response);
     }
 
     @PatchMapping("/{goodsId}")
-    public ResponseEntity<ApiResponse<UpdateGoodsResponse>> updateGoods(@PathVariable Long goodsId,
-                                                                        @Valid @RequestBody UpdateGoodsRequest request,
-                                                                        @AuthenticationPrincipal UserDetails userDetails) {
+    public ApiResponse<UpdateGoodsResponse> updateGoods(@PathVariable Long goodsId,
+                                                        @Valid @RequestBody UpdateGoodsRequest request,
+                                                        @AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
         UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request.toServiceRequest());
 
-        return ResponseEntity.ok(ApiResponse.ok(response));
+        return ApiResponse.ok(response);
     }
 }

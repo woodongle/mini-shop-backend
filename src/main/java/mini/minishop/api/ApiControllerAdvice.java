@@ -3,7 +3,6 @@ package mini.minishop.api;
 import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.CommonErrorCode;
 import mini.minishop.exception.ErrorCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,28 +11,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiControllerAdvice {
 
     @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<ApiResponse<ErrorResponse>> handleBusinessException(BusinessException e) {
+    protected ApiResponse<ErrorResponse> handleBusinessException(BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse response = ErrorResponse.of(errorCode);
 
-        return new ResponseEntity<>(ApiResponse.of(response.getStatus(), response), errorCode.getStatus());
+        return ApiResponse.of(response.getStatus(), response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ApiResponse<ErrorResponse>> handleMethodArgumentNotValidException(
+    protected ApiResponse<ErrorResponse> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().getFirst().getDefaultMessage();
         ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
         ErrorResponse response = ErrorResponse.of(errorCode, message);
 
-        return new ResponseEntity<>(ApiResponse.of(response.getStatus(), response), errorCode.getStatus());
+        return ApiResponse.of(response.getStatus(), response);
     }
 
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ApiResponse<ErrorResponse>> handleException(Exception e) {
+    protected ApiResponse<ErrorResponse> handleException(Exception e) {
         ErrorResponse response = ErrorResponse.of(CommonErrorCode.INTERNAL_SERVER_ERROR);
 
-        return new ResponseEntity<>(ApiResponse.of(response.getStatus(), response), response.getStatus());
+        return ApiResponse.of(response.getStatus(), response);
     }
 }
 

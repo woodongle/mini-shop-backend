@@ -15,7 +15,6 @@ import mini.minishop.api.service.user.response.TokenResponse;
 import mini.minishop.config.JwtTokenProvider;
 import mini.minishop.domain.user.RefreshToken;
 import mini.minishop.domain.user.User;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -38,22 +38,23 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
 
+    @ResponseStatus(CREATED)
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<String>> createUser(@Valid @RequestBody CreateUserRequest request) {
+    public ApiResponse<String> createUser(@Valid @RequestBody CreateUserRequest request) {
         User createdUser = userService.createUser(request.toServiceRequest());
 
-        return ResponseEntity.status(CREATED).body(ApiResponse.created("가입을 축하드립니다. 로그인 화면으로 이동합니다.", null));
+        return ApiResponse.created("가입을 축하드립니다. 로그인 화면으로 이동합니다.", null);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<FindUserResponse>> findUser(@PathVariable Long userId) {
+    public ApiResponse<FindUserResponse> findUser(@PathVariable Long userId) {
         FindUserResponse response = userService.findUser(userId);
 
-        return ResponseEntity.ok(ApiResponse.ok(response));
+        return ApiResponse.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
+    public TokenResponse login(@RequestBody @Valid LoginRequest loginRequest) {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
@@ -64,19 +65,19 @@ public class UserController {
 
         refreshTokenService.saveOrUpdate(user.getId(), refreshTokenValue);
 
-        return ResponseEntity.ok(new TokenResponse(accessToken, refreshTokenValue));
+        return new TokenResponse(accessToken, refreshTokenValue);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<String>> logout(@AuthenticationPrincipal UserDetails userDetails) {
+    public ApiResponse<String> logout(@AuthenticationPrincipal UserDetails userDetails) {
         User user = userService.findUser(userDetails.getUsername());
         refreshTokenService.logout(user);
 
-        return ResponseEntity.ok(ApiResponse.ok("로그아웃 되었습니다.", null));
+        return ApiResponse.ok("로그아웃 되었습니다.", null);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refresh(@RequestBody TokenRefreshRequest tokenRefreshRequest) {
+    public TokenResponse refresh(@RequestBody TokenRefreshRequest tokenRefreshRequest) {
         String requestRefreshToken = tokenRefreshRequest.getRefreshToken();
         jwtTokenProvider.validateToken(requestRefreshToken);
 
@@ -98,6 +99,6 @@ public class UserController {
 
         refreshToken.updateToken(newRefreshTokenValue);
 
-        return ResponseEntity.ok(new TokenResponse(newAccessToken, newRefreshTokenValue));
+        return new TokenResponse(newAccessToken, newRefreshTokenValue);
     }
 }
