@@ -1,6 +1,7 @@
-package mini.minishop.api.service.user;
+package mini.minishop.api.service.auth;
 
 import lombok.RequiredArgsConstructor;
+import mini.minishop.api.service.user.UserService;
 import mini.minishop.domain.user.RefreshToken;
 import mini.minishop.domain.user.RefreshTokenRepository;
 import mini.minishop.domain.user.User;

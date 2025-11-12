@@ -1,4 +1,4 @@
-package mini.minishop.api.service.user.response;
+package mini.minishop.api.service.auth.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
