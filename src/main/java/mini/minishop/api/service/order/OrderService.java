@@ -6,6 +6,7 @@ import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.CreateOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
+import mini.minishop.api.service.user.UserService;
 import mini.minishop.domain.delivery.Delivery;
 import mini.minishop.domain.delivery.DeliveryStatus;
 import mini.minishop.domain.goods.Goods;
@@ -28,17 +29,20 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final GoodsRepository goodsRepository;
+    private final UserService userService;
 
     @Transactional
-    public CreateOrderResponse createOrder(CreateOrderServiceRequest request, User user, Long goodsId) {
+    public CreateOrderResponse createOrder(CreateOrderServiceRequest request, String userEmail, Long goodsId) {
         Delivery delivery = Delivery.builder()
                 .status(DeliveryStatus.BEFORE_DELIVERY)
                 .address(request.getAddress())
                 .build();
 
+        User currnetUser = userService.findUser(userEmail);
+
         Order order = Order.builder()
                 .status(OrderStatus.COMPLETED_ORDER)
-                .user(user)
+                .user(currnetUser)
                 .delivery(delivery)
                 .build();
 
@@ -65,11 +69,13 @@ public class OrderService {
     }
 
     @Transactional
-    public CancelOrderResponse cancelOrder(Long orderId, Long userId) {
+    public CancelOrderResponse cancelOrder(Long orderId, String userEmail) {
         Order findOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(OrderErrorCode.ORDER_NOT_FOUND));
 
-        if (!userId.equals(findOrder.getUser().getId())) {
+        Long currentUserId = userService.findUser(userEmail).getId();
+
+        if (!currentUserId.equals(findOrder.getUser().getId())) {
             throw new BusinessException(OrderErrorCode.NO_PERMISSION_MODIFY_ORDER);
         }
 

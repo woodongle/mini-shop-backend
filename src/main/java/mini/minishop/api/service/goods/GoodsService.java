@@ -8,6 +8,7 @@ import mini.minishop.api.service.goods.request.UpdateGoodsServiceRequest;
 import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
+import mini.minishop.api.service.user.UserService;
 import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.goods.GoodsRepository;
 import mini.minishop.domain.user.User;
@@ -22,10 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class GoodsService {
 
     private final GoodsRepository goodsRepository;
+    private final UserService userService;
 
     @Transactional
-    public CreateGoodsResponse createGoods(CreateGoodsServiceRequest request, User user) {
-        Goods goods = request.toEntity(user);
+    public CreateGoodsResponse createGoods(CreateGoodsServiceRequest request, String userEmail) {
+        User currentUser = userService.findUser(userEmail);
+
+        Goods goods = request.toEntity(currentUser);
 
         Goods savedGoods = goodsRepository.save(goods);
 
@@ -61,11 +65,13 @@ public class GoodsService {
     }
 
     @Transactional
-    public UpdateGoodsResponse updateGoods(Long goodsId, Long userId, UpdateGoodsServiceRequest request) {
+    public UpdateGoodsResponse updateGoods(Long goodsId, String userEmail, UpdateGoodsServiceRequest request) {
         Goods findGoods = goodsRepository.findById(goodsId)
                 .orElseThrow(() -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND));
 
-        if (!userId.equals(findGoods.getUser().getId())) {
+        Long currentUserId = userService.findUser(userEmail).getId();
+
+        if (!currentUserId.equals(findGoods.getUser().getId())) {
             throw new BusinessException(GoodsErrorCode.NO_PERMISSION_MODIFY_GOODS);
         }
 

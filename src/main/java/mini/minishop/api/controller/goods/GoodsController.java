@@ -12,8 +12,6 @@ import mini.minishop.api.service.goods.GoodsService;
 import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
-import mini.minishop.api.service.user.UserService;
-import mini.minishop.domain.user.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class GoodsController {
 
     private final GoodsService goodsService;
-    private final UserService userService;
 
     @ResponseStatus(CREATED)
     @PostMapping
     public ApiResponse<CreateGoodsResponse> createGoods(@RequestBody @Valid CreateGoodsRequest request,
                                                         @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findUser(userDetails.getUsername());
-        CreateGoodsResponse response = goodsService.createGoods(request.toServiceRequest(), user);
+        String userEmail = userDetails.getUsername();
+        CreateGoodsResponse response = goodsService.createGoods(request.toServiceRequest(), userEmail);
 
         return ApiResponse.created("상품 등록이 완료되었습니다.", response);
     }
@@ -70,8 +67,8 @@ public class GoodsController {
     public ApiResponse<UpdateGoodsResponse> updateGoods(@PathVariable Long goodsId,
                                                         @Valid @RequestBody UpdateGoodsRequest request,
                                                         @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findUser(userDetails.getUsername());
-        UpdateGoodsResponse response = goodsService.updateGoods(goodsId, user.getId(), request.toServiceRequest());
+        String userEmail = userDetails.getUsername();
+        UpdateGoodsResponse response = goodsService.updateGoods(goodsId, userEmail, request.toServiceRequest());
 
         return ApiResponse.ok(response);
     }

@@ -11,8 +11,6 @@ import mini.minishop.api.service.order.OrderService;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.CreateOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
-import mini.minishop.api.service.user.UserService;
-import mini.minishop.domain.user.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final OrderService orderService;
-    private final UserService userService;
 
     @ResponseStatus(CREATED)
     @PostMapping("/{goodsId}")
@@ -38,8 +35,8 @@ public class OrderController {
                                                         @AuthenticationPrincipal UserDetails userDetails,
                                                         @PathVariable Long goodsId) {
 
-        User user = userService.findUser(userDetails.getUsername());
-        CreateOrderResponse response = orderService.createOrder(request.toServiceRequest(), user, goodsId);
+        String userEmail = userDetails.getUsername();
+        CreateOrderResponse response = orderService.createOrder(request.toServiceRequest(), userEmail, goodsId);
 
         return ApiResponse.created("상품 주문이 완료되었습니다.", response);
     }
@@ -54,8 +51,8 @@ public class OrderController {
     @PatchMapping("/{orderId}/cancel")
     public ApiResponse<CancelOrderResponse> cancelOrder(@PathVariable Long orderId,
                                                         @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findUser(userDetails.getUsername());
-        CancelOrderResponse response = orderService.cancelOrder(orderId, user.getId());
+        String userEmail = userDetails.getUsername();
+        CancelOrderResponse response = orderService.cancelOrder(orderId, userEmail);
 
         return ApiResponse.ok(response);
     }
