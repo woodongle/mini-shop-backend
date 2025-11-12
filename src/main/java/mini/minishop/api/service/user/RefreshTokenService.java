@@ -17,6 +17,7 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional
     public void saveOrUpdate(Long userId, String token) {
@@ -35,7 +36,8 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new IllegalArgumentException("토큰이 존재하지 않습니다."));
     }
 
-    public void logout(User user) {
-        refreshTokenRepository.deleteByUserId(user.getId());
+    public void logout(String userEmail) {
+        Long currentUserId = userService.findUser(userEmail).getId();
+        refreshTokenRepository.deleteByUserId(currentUserId);
     }
 }

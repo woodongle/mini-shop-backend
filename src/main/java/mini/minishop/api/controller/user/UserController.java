@@ -70,8 +70,8 @@ public class UserController {
 
     @PostMapping("/logout")
     public ApiResponse<String> logout(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = userService.findUser(userDetails.getUsername());
-        refreshTokenService.logout(user);
+        String userEmail = userDetails.getUsername();
+        refreshTokenService.logout(userEmail);
 
         return ApiResponse.ok("로그아웃 되었습니다.", null);
     }
