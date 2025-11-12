@@ -2,6 +2,7 @@ package mini.minishop.api.service.order;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import mini.minishop.api.service.goods.GoodsService;
 import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.CreateOrderResponse;
@@ -10,14 +11,12 @@ import mini.minishop.api.service.user.UserService;
 import mini.minishop.domain.delivery.Delivery;
 import mini.minishop.domain.delivery.DeliveryStatus;
 import mini.minishop.domain.goods.Goods;
-import mini.minishop.domain.goods.GoodsRepository;
 import mini.minishop.domain.order.Order;
 import mini.minishop.domain.order.OrderRepository;
 import mini.minishop.domain.order.OrderStatus;
 import mini.minishop.domain.ordergoods.OrderGoods;
 import mini.minishop.domain.user.User;
 import mini.minishop.exception.BusinessException;
-import mini.minishop.exception.goods.GoodsErrorCode;
 import mini.minishop.exception.order.OrderErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final GoodsRepository goodsRepository;
     private final UserService userService;
+    private final GoodsService goodsService;
 
     @Transactional
     public CreateOrderResponse createOrder(CreateOrderServiceRequest request, String userEmail, Long goodsId) {
@@ -46,8 +45,7 @@ public class OrderService {
                 .delivery(delivery)
                 .build();
 
-        Goods findGoods = goodsRepository.findById(goodsId)
-                .orElseThrow(() -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND));
+        Goods findGoods = goodsService.findGoodsEntityByGoodsId(goodsId);
 
         OrderGoods orderGoods = OrderGoods.builder()
                 .order(order)
