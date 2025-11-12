@@ -95,7 +95,7 @@ class OrderServiceTest {
         em.clear();
 
         // when
-        CreateOrderResponse response = orderService.createOrder(request, user, goods.getId());
+        CreateOrderResponse response = orderService.createOrder(request, user.getEmail(), goods.getId());
 
         // then
         assertThat(response.getOrderGoods().getFirst())
@@ -119,7 +119,7 @@ class OrderServiceTest {
                 .build();
 
         // when // then
-        assertThatThrownBy(() -> orderService.createOrder(request, user, 0L))
+        assertThatThrownBy(() -> orderService.createOrder(request, user.getEmail(), 0L))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("존재하지 않는 상품입니다.");
     }
@@ -216,7 +216,7 @@ class OrderServiceTest {
         int remainingGoodsInventoryQuantity = goodsInventoryQuantity - orderGoods2_Quantity;
 
         // when
-        CancelOrderResponse cancelOrderResponse = orderService.cancelOrder(order1.getId(), user.getId());
+        CancelOrderResponse cancelOrderResponse = orderService.cancelOrder(order1.getId(), user.getEmail());
 
         em.flush();
         em.clear();
@@ -260,7 +260,7 @@ class OrderServiceTest {
         // when // then
         assertThatThrownBy(() -> {
             Long nonExistOrderId = 0L;
-            orderService.cancelOrder(nonExistOrderId, user.getId());
+            orderService.cancelOrder(nonExistOrderId, user.getEmail());
         })
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("존재하지 않는 주문입니다.");
@@ -271,18 +271,19 @@ class OrderServiceTest {
     @Test
     void cancelOrderUnauthorizedUserId() {
         // given
-        User user = createUser("user", "user@user.com", "user");
-        userRepository.save(user);
+        User user1 = createUser("user1", "user1@user.com", "user1");
+        User user2 = createUser("user2", "user2@user.com", "user2");
+        userRepository.saveAll(List.of(user1, user2));
 
-        Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user);
+        Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user1);
         goodsRepository.save(goods);
 
         Delivery delivery1 = createDelivery(BEFORE_DELIVERY, "서울시");
         Delivery delivery2 = createDelivery(BEFORE_DELIVERY, "서울시");
         deliveryRepository.saveAll(List.of(delivery1, delivery2));
 
-        Order order1 = createOrder(user, delivery1);
-        Order order2 = createOrder(user, delivery2);
+        Order order1 = createOrder(user1, delivery1);
+        Order order2 = createOrder(user1, delivery2);
         orderRepository.saveAll(List.of(order1, order2));
 
         OrderGoods orderGoods1 = createOrderGoods(2, order1, goods);
@@ -291,8 +292,7 @@ class OrderServiceTest {
 
         // when // then
         assertThatThrownBy(() -> {
-            Long unauthorizedUserId = 0L;
-            orderService.cancelOrder(order1.getId(), unauthorizedUserId);
+            orderService.cancelOrder(order1.getId(), user2.getEmail());
         })
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("주문을 취소할 권한이 없습니다.");
@@ -319,7 +319,7 @@ class OrderServiceTest {
         orderGoodsRepository.save(orderGoods);
 
         // when // then
-        assertThatThrownBy(() -> orderService.cancelOrder(order.getId(), user.getId()))
+        assertThatThrownBy(() -> orderService.cancelOrder(order.getId(), user.getEmail()))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("배송이 진행 중이거나, 이미 배송 완료된 상품은 취소가 불가능합니다.");
     }

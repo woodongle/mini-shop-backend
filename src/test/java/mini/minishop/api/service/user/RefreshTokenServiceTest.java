@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.persistence.EntityManager;
+import mini.minishop.api.service.auth.RefreshTokenService;
 import mini.minishop.domain.user.RefreshToken;
 import mini.minishop.domain.user.RefreshTokenRepository;
 import mini.minishop.domain.user.User;
@@ -136,7 +137,7 @@ class RefreshTokenServiceTest {
         refreshTokenRepository.save(new RefreshToken(user, "token"));
 
         // when
-        refreshTokenService.logout(user);
+        refreshTokenService.logout(user.getEmail());
 
         // then
         assertThat(refreshTokenRepository.findByUserId(user.getId())).isEmpty();

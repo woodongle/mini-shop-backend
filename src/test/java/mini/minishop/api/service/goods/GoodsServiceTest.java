@@ -63,7 +63,7 @@ class GoodsServiceTest {
                 .inventoryQuantity(goodsInventoryQuantity).build();
 
         // when
-        CreateGoodsResponse goodsResponse = goodsService.createGoods(request, savedUser);
+        CreateGoodsResponse goodsResponse = goodsService.createGoods(request, savedUser.getEmail());
 
         // then
         assertThat(goodsResponse).extracting("goodsId", "goodsName", "price", "inventoryQuantity", "createDate")
@@ -207,7 +207,7 @@ class GoodsServiceTest {
                 .build();
 
         // when
-        UpdateGoodsResponse response = goodsService.updateGoods(goods.getId(), user.getId(), request);
+        UpdateGoodsResponse response = goodsService.updateGoods(goods.getId(), user.getEmail(), request);
 
         // then
         assertThat(response)
@@ -234,7 +234,7 @@ class GoodsServiceTest {
         // whe // then
         assertThatThrownBy(() -> {
             long nonExistGoodsId = 0L;
-            goodsService.updateGoods(nonExistGoodsId, user.getId(), request);
+            goodsService.updateGoods(nonExistGoodsId, user.getEmail(), request);
         })
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("존재하지 않는 상품입니다.");
@@ -244,10 +244,11 @@ class GoodsServiceTest {
     @Test
     void updateGoodsUnauthorizedUserId() {
         // given
-        User user = createUser("user", "user@user.com", "user");
-        userRepository.save(user);
+        User user1 = createUser("user1", "user1@user.com", "user1");
+        User user2 = createUser("user2", "user2@user.com", "user2");
+        userRepository.saveAll(List.of(user1, user2));
 
-        Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user);
+        Goods goods = createGoods("goods", new BigDecimal("1000.00"), 10, user1);
         goodsRepository.save(goods);
 
         UpdateGoodsServiceRequest request = UpdateGoodsServiceRequest.builder()
@@ -258,8 +259,7 @@ class GoodsServiceTest {
 
         // when // then
         assertThatThrownBy(() -> {
-            Long unauthorizedUserId = 0L;
-            goodsService.updateGoods(goods.getId(), unauthorizedUserId, request);
+            goodsService.updateGoods(goods.getId(), user2.getEmail(), request);
         })
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("상품을 수정할 권한이 없습니다.");
