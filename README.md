@@ -44,6 +44,7 @@
 
 ```
 ├──src/
+|   ├── docs/  # API 문서
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── mini/minishop/
