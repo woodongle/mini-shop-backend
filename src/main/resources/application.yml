@@ -37,3 +37,12 @@ jwt:
   secret: ${JWT_SECRET_KEY}
   expiration-ms: 3600000  # 1시간 (엑세스 토큰)
   refresh-expiration-ms: 604800000  # 7일 (리프레시 토큰)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,metrics,info,prometheus"
+  endpoint:
+    health:
+      show-details: always
