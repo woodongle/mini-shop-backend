@@ -1,8 +1,9 @@
 services:
   minishop-db:
     image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: pwd1234
+    container_name: minishop-db
+    env_file:
+      - .env
     volumes:
       - mysql_data:/var/lib/mysql
     ports:

@@ -38,3 +38,6 @@ out/
 
 ### docker volume file ###
 /mysql_data
+
+### Environment Files ###
+.env
