@@ -14,7 +14,7 @@ endif::[]
 
 include::api/goods/goods-create.adoc[]
 include::api/goods/goods-find-all.adoc[]
-include::api/goods/goods-find-only-one.adoc[]
+include::api/goods/goods-find-by-goods-id.adoc[]
 include::api/goods/goods-search.adoc[]
 include::api/goods/goods-update.adoc[]
 
@@ -22,7 +22,7 @@ include::api/goods/goods-update.adoc[]
 == User API
 
 include::api/user/user-create.adoc[]
-include::api/user/user-find-only-one.adoc[]
+include::api/user/user-find-by-user-id.adoc[]
 include::api/user/user-login.adoc[]
 include::api/user/user-logout.adoc[]
 include::api/user/user-refresh.adoc[]

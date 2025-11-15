@@ -136,7 +136,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("user/user-find-only-one",
+                .andDo(document("user/user-find-by-user-id",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(

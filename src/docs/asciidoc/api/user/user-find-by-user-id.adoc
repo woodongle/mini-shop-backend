@@ -1,0 +1,11 @@
+[[user-find-only-one]]
+=== 특정 회원 조회
+
+==== HTTP Request
+
+include::{snippets}/user/user-find-by-user-id/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/user/user-find-by-user-id/http-response.adoc[]
+include::{snippets}/user/user-find-by-user-id/response-fields.adoc[]
