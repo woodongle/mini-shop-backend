@@ -37,7 +37,7 @@ public class OrderService {
                 .address(request.getAddress())
                 .build();
 
-        User currnetUser = userService.findUser(userEmail);
+        User currnetUser = userService.findUserByUserEmail(userEmail);
 
         Order order = Order.builder()
                 .status(OrderStatus.COMPLETED_ORDER)
@@ -71,7 +71,7 @@ public class OrderService {
         Order findOrder = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(OrderErrorCode.ORDER_NOT_FOUND));
 
-        Long currentUserId = userService.findUser(userEmail).getId();
+        Long currentUserId = userService.findUserByUserEmail(userEmail).getId();
 
         if (!currentUserId.equals(findOrder.getUser().getId())) {
             throw new BusinessException(OrderErrorCode.NO_PERMISSION_MODIFY_ORDER);

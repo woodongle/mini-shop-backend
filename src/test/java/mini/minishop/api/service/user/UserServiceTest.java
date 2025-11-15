@@ -144,7 +144,7 @@ class UserServiceTest {
         em.clear();
 
         // when
-        User foundUser = userService.findUser(user1_Email);
+        User foundUser = userService.findUserByUserEmail(user1_Email);
 
         // then
         assertThat(foundUser.getName()).isEqualTo(user1_name);
@@ -167,7 +167,7 @@ class UserServiceTest {
         // when // then
         assertThatThrownBy(() -> {
             String nonExistEmail = "nonExistEmail";
-            userService.findUser(nonExistEmail);
+            userService.findUserByUserEmail(nonExistEmail);
         })
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("존재하지 않는 회원입니다.");

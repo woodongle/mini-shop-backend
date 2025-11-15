@@ -72,7 +72,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .role(UserRole.USER)
                 .build();
 
-        given(userService.findUser(mockUser.getEmail())).willReturn(mockUser);
+        given(userService.findUserByUserEmail(mockUser.getEmail())).willReturn(mockUser);
 
         CreateGoodsRequest request = CreateGoodsRequest.builder()
                 .name("goods")
@@ -299,7 +299,7 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .role(UserRole.USER)
                 .build();
 
-        given(userService.findUser(mockUser.getEmail())).willReturn(mockUser);
+        given(userService.findUserByUserEmail(mockUser.getEmail())).willReturn(mockUser);
 
         UpdateGoodsRequest request = UpdateGoodsRequest.builder()
                 .goodsName("updated-goods")

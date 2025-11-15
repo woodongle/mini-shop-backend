@@ -247,7 +247,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
         User user = mock(User.class);
 
         given(user.getId()).willReturn(mockUserId);
-        given(userService.findUser(mockUserEmail))
+        given(userService.findUserByUserEmail(mockUserEmail))
                 .willReturn(user);
         given(orderService.cancelOrder(mockOrderId, mockUserEmail))
                 .willReturn(response);

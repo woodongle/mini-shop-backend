@@ -38,7 +38,7 @@ public class RefreshTokenService {
     }
 
     public void logout(String userEmail) {
-        Long currentUserId = userService.findUser(userEmail).getId();
+        Long currentUserId = userService.findUserByUserEmail(userEmail).getId();
         refreshTokenRepository.deleteByUserId(currentUserId);
     }
 }

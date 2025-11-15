@@ -207,7 +207,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .role(UserRole.USER)
                 .build();
 
-        given(userService.findUser(mockUser.getEmail()))
+        given(userService.findUserByUserEmail(mockUser.getEmail()))
                 .willReturn(mockUser);
         doNothing().when(refreshTokenService).logout(mockUser.getEmail());
 

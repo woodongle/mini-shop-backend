@@ -48,7 +48,7 @@ public class UserService {
                 .orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));
     }
 
-    public User findUser(String email) {
+    public User findUserByUserEmail(String email) {
         Optional<User> findUser = userRepository.findByEmail(email);
 
         return findUser.orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));

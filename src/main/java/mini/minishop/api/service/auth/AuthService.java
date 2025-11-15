@@ -51,7 +51,7 @@ public class AuthService {
 
         String email = jwtTokenProvider.getEmailFromToken(refreshToken.getToken());
 
-        User findUser = userService.findUser(email);
+        User findUser = userService.findUserByUserEmail(email);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 new org.springframework.security.core.userdetails.User(findUser.getEmail(), "",

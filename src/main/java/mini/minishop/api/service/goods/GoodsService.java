@@ -27,7 +27,7 @@ public class GoodsService {
 
     @Transactional
     public CreateGoodsResponse createGoods(CreateGoodsServiceRequest request, String userEmail) {
-        User currentUser = userService.findUser(userEmail);
+        User currentUser = userService.findUserByUserEmail(userEmail);
 
         Goods goods = request.toEntity(currentUser);
 
@@ -72,7 +72,7 @@ public class GoodsService {
         Goods findGoods = goodsRepository.findById(goodsId)
                 .orElseThrow(() -> new BusinessException(GoodsErrorCode.GOODS_NOT_FOUND));
 
-        Long currentUserId = userService.findUser(userEmail).getId();
+        Long currentUserId = userService.findUserByUserEmail(userEmail).getId();
 
         if (!currentUserId.equals(findGoods.getUser().getId())) {
             throw new BusinessException(GoodsErrorCode.NO_PERMISSION_MODIFY_GOODS);
