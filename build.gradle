@@ -87,3 +87,7 @@ bootJar {
         into 'static/docs'
     }
 }
+
+bootRun {
+    args = ['--spring.profiles.active=dev']
+}

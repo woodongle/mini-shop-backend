@@ -1,27 +1,6 @@
 spring:
-  datasource:
-    # H2
-    #    url: 'jdbc:h2:tcp://localhost/~/minishop'
-    #    username: sa
-    #    password:
-    #    driver-class-name: org.h2.Driver
-
-    # MySQL
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
   profiles:
     active: dev
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -29,14 +8,7 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.springframework.security: debug
-    org.hibernate.orm.jdbc.bind: trace
-
-jwt:
-  secret: ${JWT_SECRET_KEY}
-  expiration-ms: 3600000  # 1시간 (엑세스 토큰)
-  refresh-expiration-ms: 604800000  # 7일 (리프레시 토큰)
+    root: info
 
 management:
   endpoints:

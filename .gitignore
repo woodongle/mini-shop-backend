@@ -41,3 +41,6 @@ out/
 
 ### Environment Files ###
 .env
+
+### Application Configuration Files ###
+src/main/resources/application-dev.yml
