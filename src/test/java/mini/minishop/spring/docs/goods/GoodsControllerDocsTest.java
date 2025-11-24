@@ -111,8 +111,6 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                         .description("상품 재고 수량")
                         ),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -128,7 +126,9 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량"),
                                 fieldWithPath("data.createDate").type(STRING)
-                                        .description("상품 재고 수량")
+                                        .description("상품 재고 수량"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
@@ -163,11 +163,8 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andDo(document("goods/goods-find-all",
-                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -183,7 +180,9 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량"),
                                 fieldWithPath("data[].modifiedDate").type(STRING)
-                                        .description("상품 변경일")
+                                        .description("상품 변경일"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
@@ -209,11 +208,8 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andDo(document("goods/goods-find-by-goods-id",
-                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -229,7 +225,9 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량"),
                                 fieldWithPath("data.modifiedDate").type(STRING)
-                                        .description("상품 변경일")
+                                        .description("상품 변경일"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
@@ -265,11 +263,8 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andDo(document("goods/goods-search",
-                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -285,7 +280,9 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량"),
                                 fieldWithPath("data[].modifiedDate").type(STRING)
-                                        .description("상품 변경일")
+                                        .description("상품 변경일"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
@@ -338,8 +335,6 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                         .description("상품 재고 수량")
                         ),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -355,7 +350,9 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량"),
                                 fieldWithPath("data.modifiedDate").type(STRING)
-                                        .description("상품 수정일")
+                                        .description("상품 수정일"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }

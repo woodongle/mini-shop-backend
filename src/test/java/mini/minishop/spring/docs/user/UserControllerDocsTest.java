@@ -137,11 +137,8 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andDo(document("user/user-find-by-user-id",
-                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -153,7 +150,9 @@ public class UserControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.username").type(STRING)
                                         .description("사용자 이름"),
                                 fieldWithPath("data.userEmail").type(STRING)
-                                        .description("사용자 이메일")
+                                        .description("사용자 이메일"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
@@ -221,8 +220,7 @@ public class UserControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.message").value("로그아웃 되었습니다."))
                 .andDo(document("user/user-logout",
-                        preprocessRequest(),
-                        preprocessResponse(),
+                        preprocessResponse(prettyPrint()),
                         responseBody()
                 ));
     }

@@ -41,8 +41,6 @@ import mini.minishop.domain.user.User;
 import mini.minishop.spring.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -59,7 +57,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
         })
 public class OrderControllerDocsTest extends RestDocsSupport {
 
-    private static final Logger log = LoggerFactory.getLogger(OrderControllerDocsTest.class);
     @MockitoBean
     private OrderService orderService;
 
@@ -116,8 +113,6 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                                         .description("주문 상품 수량")
                         ),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -135,7 +130,9 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.orderGoods[].quantity").type(NUMBER)
                                         .description("상품 수량"),
                                 fieldWithPath("data.orderGoods[].paymentAmount").type(NUMBER)
-                                        .description("총 상품 가격")
+                                        .description("총 상품 가격"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
 
@@ -188,11 +185,8 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andDo(document("/order/order-find-history",
-                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -213,7 +207,9 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data[].orderGoods[].quantity").type(NUMBER)
                                         .description("상품 수량"),
                                 fieldWithPath("data[].orderGoods[].paymentAmount").type(NUMBER)
-                                        .description("총 상품 가격")
+                                        .description("총 상품 가격"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
@@ -260,11 +256,8 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andDo(document("/order/order-cancel",
-                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                                fieldWithPath("code").type(NUMBER)
-                                        .description("응답 코드"),
                                 fieldWithPath("status").type(STRING)
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
@@ -284,7 +277,9 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("data.orderGoods[].quantity").type(NUMBER)
                                         .description("상품 수량"),
                                 fieldWithPath("data.orderGoods[].paymentAmount").type(NUMBER)
-                                        .description("총 상품 가격")
+                                        .description("총 상품 가격"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
