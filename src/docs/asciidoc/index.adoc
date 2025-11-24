@@ -9,6 +9,11 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
+[[Home-API]]
+== Home API
+
+include::api/home.adoc[]
+
 [[Goods-API]]
 == Goods API
 

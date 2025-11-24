@@ -1,0 +1,11 @@
+[[home]]
+=== 메인 페이지
+
+==== HTTP Request
+
+include::{snippets}/home/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/home/http-response.adoc[]
+include::{snippets}/home/response-fields.adoc[]
