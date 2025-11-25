@@ -44,3 +44,15 @@ out/
 
 ### Application Configuration Files ###
 src/main/resources/application-dev.yml
+
+### Minishop Key Files ###
+*.pem
+minishop-key.*
+minishop-key
+
+### Terraform ###
+terraform.tfvars
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
