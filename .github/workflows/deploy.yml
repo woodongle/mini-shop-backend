@@ -1,0 +1,68 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [ develop ]
+
+env:
+  AWS_REGION: ap-northeast-2
+  ECR_REPOSITORY: backend-minishop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Deploy to EC2 using SSM
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          aws ssm send-command \
+            --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy Minishop Application" \
+            --parameters commands="[
+              \"docker login -u AWS -p $(aws ecr get-login-password --region $AWS_REGION) $REGISTRY\",
+              \"docker pull $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG\",
+              \"docker stop minishop-app || true\",
+              \"docker rm minishop-app || true\",
+              \"docker run -d --name minishop-app \
+                -p 8080:8080 \
+                -e JAVA_OPTS='-Xmx256m' \
+                -e SPRING_DATASOURCE_URL=jdbc:mysql://${{ secrets.RDS_ENDPOINT }}/minishop?useSSL=false&serverTimezone=Asia/Seoul\&allowPublicKeyRetrieval=true \
+                -e SPRING_DATASOURCE_PASSWORD='${{ secrets.RDS_PASSWORD }}' \
+                $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG\"   
+            ]" \
+            --timeout-seconds 600 \
+            --output text
