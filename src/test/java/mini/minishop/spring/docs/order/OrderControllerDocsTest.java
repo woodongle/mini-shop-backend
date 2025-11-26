@@ -1,9 +1,9 @@
 package mini.minishop.spring.docs.order;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -37,7 +37,6 @@ import mini.minishop.api.service.order.response.OrderGoodsResponse;
 import mini.minishop.api.service.user.UserService;
 import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.domain.order.OrderStatus;
-import mini.minishop.domain.user.User;
 import mini.minishop.spring.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -88,10 +87,9 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .orderGoods(List.of(goods1, goods2))
                 .build();
 
-        String mockUserEmail = "user@user.com";
         Long mockGoodsId = 1L;
 
-        given(orderService.createOrder(any(CreateOrderServiceRequest.class), eq(mockUserEmail), eq(mockGoodsId)))
+        given(orderService.createOrder(any(CreateOrderServiceRequest.class), anyString(), eq(mockGoodsId)))
                 .willReturn(response);
 
         mockMvc.perform(post("/api/v1/order/{goodsId}", mockGoodsId)
@@ -142,6 +140,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
     @WithMockUser(username = "user@user.com", roles = "USER")
     @Test
     void findOrderHistory() throws Exception {
+        Long mockOrderId = 1L;
         Long mockUserId = 1L;
 
         OrderGoodsResponse goods1 = OrderGoodsResponse.builder()
@@ -160,14 +159,14 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .paymentAmount(new BigDecimal("3000.00"))
                 .build();
         FindOrderHistoryResponse orderHistory1 = FindOrderHistoryResponse.builder()
-                .orderId(mockUserId)
+                .orderId(mockOrderId)
                 .orderStatus(OrderStatus.COMPLETED_ORDER)
                 .orderedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
                 .canceledDate(null)
                 .orderGoods(List.of(goods1, goods2))
                 .build();
         FindOrderHistoryResponse orderHistory2 = FindOrderHistoryResponse.builder()
-                .orderId(mockUserId)
+                .orderId(mockOrderId)
                 .orderStatus(OrderStatus.CANCELED_ORDER)
                 .orderedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
                 .canceledDate(LocalDateTime.of(2000, 1, 1, 10, 0))
@@ -218,7 +217,6 @@ public class OrderControllerDocsTest extends RestDocsSupport {
     @WithMockUser(username = "user@user.com", roles = "USER")
     @Test
     void cancelOrder() throws Exception {
-        Long mockUserId = 1L;
         String mockUserEmail = "user@user.com";
         Long mockOrderId = 1L;
 
@@ -233,18 +231,13 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .paymentAmount(new BigDecimal("5000.00"))
                 .build();
         CancelOrderResponse response = CancelOrderResponse.builder()
-                .orderId(mockUserId)
+                .orderId(mockOrderId)
                 .orderStatus(OrderStatus.CANCELED_ORDER)
                 .orderedDate(LocalDateTime.of(2000, 1, 1, 9, 0))
                 .canceledDate(LocalDateTime.of(2000, 1, 1, 10, 0))
                 .orderGoods(List.of(goods1, goods2))
                 .build();
 
-        User user = mock(User.class);
-
-        given(user.getId()).willReturn(mockUserId);
-        given(userService.findUserByUserEmail(mockUserEmail))
-                .willReturn(user);
         given(orderService.cancelOrder(mockOrderId, mockUserEmail))
                 .willReturn(response);
 
