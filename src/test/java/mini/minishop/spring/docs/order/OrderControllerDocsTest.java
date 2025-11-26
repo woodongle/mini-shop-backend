@@ -87,7 +87,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .orderGoods(List.of(goods1, goods2))
                 .build();
 
-        Long mockGoodsId = 1L;
+        Long mockGoodsId = 2L;
 
         given(orderService.createOrder(any(CreateOrderServiceRequest.class), anyString(), eq(mockGoodsId)))
                 .willReturn(response);
@@ -140,8 +140,8 @@ public class OrderControllerDocsTest extends RestDocsSupport {
     @WithMockUser(username = "user@user.com", roles = "USER")
     @Test
     void findOrderHistory() throws Exception {
-        Long mockOrderId = 1L;
-        Long mockUserId = 1L;
+        Long mockOrderId = 3L;
+        Long mockUserId = 4L;
 
         OrderGoodsResponse goods1 = OrderGoodsResponse.builder()
                 .goodsName("상품1")
@@ -218,7 +218,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
     @Test
     void cancelOrder() throws Exception {
         String mockUserEmail = "user@user.com";
-        Long mockOrderId = 1L;
+        Long mockOrderId = 5L;
 
         OrderGoodsResponse goods1 = OrderGoodsResponse.builder()
                 .goodsName("상품1")
