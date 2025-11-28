@@ -6,8 +6,9 @@
 
 ## 🚀프로젝트 소개
 
-이 프로젝트는 취업을 위해 **프로젝트 관리**와 **기술 스택**, 그리고 **API 개발** 능력을 향상시키고자 시작한 개인 프로젝트입니다.<br>
-판매자는 상품을 판매하고, 구매자는 상품을 구매하는 간단한 **C to C** 서비스입니다.
+Mini Shop은 C2C 방식으로 판매자와 구매자가 상품을 등록하고 주문할 수 있는 간단한 커머스 서비스입니다.
+
+본 프로젝트는 API 개발 능력, 클라우드 인프라 구축 경험, CI/CD 자동화 경험을 쌓기 위해 진행한 개인 프로젝트입니다.
 
 <hr>
 
@@ -18,23 +19,42 @@
 
 ### 📱개발 기간
 
-- 2025.07.01 ~ 2025.09.02, 이후 클라우드 환경에서 모니터링 후 성능 개선 진행
+- 2025.07.01 ~ 2025.09.02
+- 이후 AWS 환경에서 모니터링 & 성능 개선 진행 중
 
 <hr>
 
 ### 🛠️기술 스택
 
-- **Environment**: IntelliJ IDEA, GitHub, Notion
-- **Backend**: Java, Spring Boot, Spring Security, JPA, JWT
-- **Database**: H2 Database
+- **Environment**
+  - IntelliJ IDEA
+  - GitHub
+  - Notion
+- **Backend**
+  - Java
+  - Spring Boot
+  - Spring Security
+  - Spring Data JPA
+  - JWT Authentication
+- **Database**
+  - H2 Database(개발 환경)
+  - MySQL (AWS RDS - 운영 환경)
+- **Infra & DevOps**
+  - AWS
+  - Docker
+  - GitHub Actions
+  - Terraform
 
 <hr>
 
 ### ✨주요 기능
 
-- JWT 기반 회원 관리
+- JWT 기반 회원 인증/인가
+  - 회원 가입, 로그인, JWT Access/Refresh Token 발급
 - 상품 등록 및 수정 기능
+  - 판매자가 상품을 등록하고 관리할 수 있는 기능 제공
 - 상품 주문 기능
+  - 구매자가 상품을 주문하고 주문 내역을 조회할 수 있는 기능 제공
 
 <hr>
 
