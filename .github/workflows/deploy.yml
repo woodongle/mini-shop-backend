@@ -63,8 +63,10 @@ jobs:
               \"docker run -d --name minishop-app \
                 -p 8080:8080 \
                 -e JAVA_OPTS='-Xmx256m' \
-                -e SPRING_DATASOURCE_URL=jdbc:mysql://${{ secrets.RDS_ENDPOINT }}/minishop?useSSL=false\\&serverTimezone=Asia/Seoul\\&allowPublicKeyRetrieval=true \
-                -e SPRING_DATASOURCE_PASSWORD='${{ secrets.RDS_PASSWORD }}' \
+                -e DB_URL=jdbc:mysql://${{ secrets.RDS_ENDPOINT }}/${{ secrets.RDS_DBNAME }}?useSSL=false\\&serverTimezone=Asia/Seoul\\&allowPublicKeyRetrieval=true \
+                -e DB_USERNAME='${{ secrets.RDS_USERNAME }}' \
+                -e DB_PASSWORD='${{ secrets.RDS_PASSWORD }}' \
+                -e JWT_SECRET_KEY='${{ secrets.JWT_SECRET_KEY }}' \
                 $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG\"   
             ]" \
             --timeout-seconds 600 \
