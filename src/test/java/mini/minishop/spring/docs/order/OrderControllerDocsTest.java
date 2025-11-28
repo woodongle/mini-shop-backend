@@ -101,7 +101,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.code").value("201"))
                 .andExpect(jsonPath("$.status").value("CREATED"))
                 .andExpect(jsonPath("$.message").value("상품 주문이 완료되었습니다."))
-                .andDo(document("/order/order-create",
+                .andDo(document("order/order-create",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -183,7 +183,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .andDo(print())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("/order/order-find-history",
+                .andDo(document("order/order-find-history",
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("status").type(STRING)
@@ -248,7 +248,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
                 .andDo(print())
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
-                .andDo(document("/order/order-cancel",
+                .andDo(document("order/order-cancel",
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("status").type(STRING)
