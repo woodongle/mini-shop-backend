@@ -1,6 +1,7 @@
 package mini.minishop.config;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.goods.GoodsRepository;
@@ -59,49 +60,23 @@ public class DataInitializerConfig {
             User user3 = userRepository.findByEmail("test3@test.com")
                     .orElseThrow(() -> new IllegalStateException("초기화 데이터에 user3가 존재하지 않습니다."));
 
-            Goods goods1 = Goods.builder()
-                    .user(user1)
-                    .name("goods1")
-                    .price(new BigDecimal("1000.00"))
-                    .inventoryQuantity(100)
-                    .build();
+            List<User> users = List.of(user1, user2, user3);
+            List<Goods> goodsList = new ArrayList<>();
 
-            Goods goods2 = Goods.builder()
-                    .user(user1)
-                    .name("goods2")
-                    .price(new BigDecimal("2000.00"))
-                    .inventoryQuantity(200)
-                    .build();
+            for (int i = 1; i <= 1000; i++) {
+                User selectedUser = users.get(i % 3); // 0,1,2 반복
 
-            Goods goods3 = Goods.builder()
-                    .user(user2)
-                    .name("goods3")
-                    .price(new BigDecimal("3000.00"))
-                    .inventoryQuantity(300)
-                    .build();
+                Goods goods = Goods.builder()
+                        .user(selectedUser)
+                        .name("테스트상품" + String.format("%04d", i))
+                        .price(new BigDecimal(String.format("%d.%02d", 1000 + i, i % 100)))
+                        .inventoryQuantity((100 - (i % 100)))  // 100 → 0 반복
+                        .build();
 
-            Goods goods4 = Goods.builder()
-                    .user(user2)
-                    .name("goods4")
-                    .price(new BigDecimal("4000.00"))
-                    .inventoryQuantity(400)
-                    .build();
+                goodsList.add(goods);
+            }
 
-            Goods goods5 = Goods.builder()
-                    .user(user3)
-                    .name("goods5")
-                    .price(new BigDecimal("5000.00"))
-                    .inventoryQuantity(500)
-                    .build();
-
-            Goods goods6 = Goods.builder()
-                    .user(user3)
-                    .name("goods6")
-                    .price(new BigDecimal("6000.00"))
-                    .inventoryQuantity(600)
-                    .build();
-
-            goodsRepository.saveAll(List.of(goods1, goods2, goods3, goods4, goods5, goods6));
+            goodsRepository.saveAll(goodsList);
         };
     }
 }
