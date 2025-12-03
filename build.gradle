@@ -68,10 +68,6 @@ ext {
 
 test {
     outputs.dir snippetsDir
-
-    doFirst {
-        snippetsDir.mkdirs()
-    }
 }
 
 asciidoctor {
