@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import mini.minishop.domain.user.User;
+import mini.minishop.domain.user.UserRole;
 
 @Getter
 @Setter
@@ -25,6 +26,7 @@ public class CreateUserServiceRequest {
                 .name(name)
                 .email(email)
                 .password(encryptedPassword)
+                .role(UserRole.USER)
                 .build();
     }
 }
