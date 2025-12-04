@@ -47,8 +47,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public TokenResponse login(@RequestBody @Valid LoginRequest loginRequest) {
-        return authService.login(loginRequest.toServiceRequest());
+    public ApiResponse<TokenResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
+        return ApiResponse.ok(authService.login(loginRequest.toServiceRequest()));
     }
 
     @PostMapping("/logout")
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/refresh")
-    public TokenResponse refresh(@RequestBody TokenRefreshRequest tokenRefreshRequest) {
-        return authService.refresh(tokenRefreshRequest);
+    public ApiResponse<TokenResponse> refresh(@RequestBody TokenRefreshRequest tokenRefreshRequest) {
+        return ApiResponse.ok(authService.refresh(tokenRefreshRequest));
     }
 }

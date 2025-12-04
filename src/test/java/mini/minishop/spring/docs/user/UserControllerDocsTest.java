@@ -189,10 +189,18 @@ public class UserControllerDocsTest extends RestDocsSupport {
                                         .description("사용자 비밀번호")
                         ),
                         responseFields(
-                                fieldWithPath("accessToken").type(STRING)
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.accessToken").type(STRING)
                                         .description("액세스 토큰"),
-                                fieldWithPath("refreshToken").type(STRING)
-                                        .description("리프레시 토큰")
+                                fieldWithPath("data.refreshToken").type(STRING)
+                                        .description("리프레시 토큰"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
     }
@@ -254,10 +262,18 @@ public class UserControllerDocsTest extends RestDocsSupport {
                                         .description("기존 리프레쉬 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("accessToken").type(STRING)
-                                        .description("새로운 액세스 토큰"),
-                                fieldWithPath("refreshToken").type(STRING)
-                                        .description("새로운 리프레쉬 토큰")
+                                fieldWithPath("status").type(STRING)
+                                        .description("응답 상태"),
+                                fieldWithPath("message").type(STRING)
+                                        .description("응답 메시지"),
+                                fieldWithPath("data").type(OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.accessToken").type(STRING)
+                                        .description("액세스 토큰"),
+                                fieldWithPath("data.refreshToken").type(STRING)
+                                        .description("리프레시 토큰"),
+                                fieldWithPath("code").type(NUMBER)
+                                        .description("응답 코드")
                         )
                 ));
 
