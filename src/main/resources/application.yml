@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod
+    active: dev
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -18,3 +18,10 @@ management:
   endpoint:
     health:
       show-details: always
+
+  metrics:
+    tags:
+      application: minishop-app
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
