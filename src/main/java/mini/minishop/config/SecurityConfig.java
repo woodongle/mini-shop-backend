@@ -26,11 +26,12 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/api/v1/users/refresh", "/api/v1/users/signup", "/api/v1/users/login",
-                                "/h2-console/**", "/actuator/**").permitAll()
+                        .requestMatchers("/", "/api/v1/users/refresh", "/api/v1/users/signup",
+                                "/api/v1/users/login").permitAll()
+                        .requestMatchers("/h2-console/**", "/actuator/**").permitAll()
+                        .requestMatchers("/error", "/error/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
