@@ -49,7 +49,7 @@ class GoodsRepositoryTest {
         goodsRepository.saveAll(List.of(goods1, goods2));
 
         // when
-        List<FindGoodsResponse> foundGoods = goodsRepository.findByNameContaining("goods");
+        List<FindGoodsResponse> foundGoods = goodsRepository.findByNameContaining("goods", null).getContent();
 
         // then
         assertThat(foundGoods).hasSize(2);

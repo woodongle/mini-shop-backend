@@ -1,5 +1,6 @@
 package mini.minishop.spring.docs.goods;
 
+import static java.sql.JDBCType.BOOLEAN;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
@@ -15,6 +16,7 @@ import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -44,6 +46,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -253,10 +257,15 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                         .build()
         );
 
-        given(goodsService.searchGoodsByName("goods")).willReturn(responses);
+        PageImpl<FindGoodsResponse> pageResponse = new PageImpl<>(responses, PageRequest.of(0, 10), 2);
+
+        given(goodsService.searchGoodsByName("goods", 0, 10))
+                .willReturn(pageResponse);
 
         mockMvc.perform(get("/api/v1/goods/search")
                         .param("name", "goods")
+                        .param("page", "0")
+                        .param("size", "10")
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -269,18 +278,42 @@ public class GoodsControllerDocsTest extends RestDocsSupport {
                                         .description("응답 상태"),
                                 fieldWithPath("message").type(STRING)
                                         .description("응답 메시지"),
-                                fieldWithPath("data").type(ARRAY)
-                                        .description("응답 데이터"),
-                                fieldWithPath("data[].id").type(NUMBER)
+
+                                subsectionWithPath("data").type(OBJECT)
+                                        .description("페이징 처리된 응답 데이터"),
+                                
+                                fieldWithPath("data.content[].id").type(NUMBER)
                                         .description("상품 ID"),
-                                fieldWithPath("data[].name").type(STRING)
+                                fieldWithPath("data.content[].name").type(STRING)
                                         .description("상품 이름"),
-                                fieldWithPath("data[].price").type(NUMBER)
+                                fieldWithPath("data.content[].price").type(NUMBER)
                                         .description("상품 가격"),
-                                fieldWithPath("data[].inventoryQuantity").type(NUMBER)
+                                fieldWithPath("data.content[].inventoryQuantity").type(NUMBER)
                                         .description("상품 재고 수량"),
-                                fieldWithPath("data[].modifiedDate").type(STRING)
+                                fieldWithPath("data.content[].modifiedDate").type(STRING)
                                         .description("상품 변경일"),
+
+                                subsectionWithPath("data.pageable").ignored(),
+
+                                fieldWithPath("data.totalPages")
+                                        .type(NUMBER).description("전체 페이지 수"),
+                                fieldWithPath("data.totalElements")
+                                        .type(NUMBER).description("전체 데이터 수"),
+                                fieldWithPath("data.last")
+                                        .type(BOOLEAN).description("마지막 페이지 여부"),
+                                fieldWithPath("data.size")
+                                        .type(NUMBER).description("요청한 페이지 크기"),
+                                fieldWithPath("data.number")
+                                        .type(NUMBER).description("현재 페이지 번호(0부터 시작)"),
+
+                                subsectionWithPath("data.sort").ignored(),
+
+                                fieldWithPath("data.numberOfElements")
+                                        .type(NUMBER).description("현재 페이지의 데이터 수"),
+                                fieldWithPath("data.first")
+                                        .type(BOOLEAN).description("첫 페이지 여부"),
+                                fieldWithPath("data.empty")
+                                        .type(BOOLEAN).description("비어있는 페이지 여부"),
                                 fieldWithPath("code").type(NUMBER)
                                         .description("응답 코드")
                         )

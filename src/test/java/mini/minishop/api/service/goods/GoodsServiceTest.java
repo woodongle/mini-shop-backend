@@ -176,7 +176,7 @@ class GoodsServiceTest {
         em.clear();
 
         // when
-        List<FindGoodsResponse> foundGoods = goodsService.searchGoodsByName("goods");
+        List<FindGoodsResponse> foundGoods = goodsService.searchGoodsByName("goods", 0, 10).getContent();
 
         // then
         assertThat(foundGoods).hasSize(2);
