@@ -1,5 +1,5 @@
 import http from "k6/http";
-import {check, sleep} from "k6";
+import {check} from "k6";
 
 export const options = {
     vus: 50,              // 동시에 접속하는 사용자 수
@@ -47,7 +47,7 @@ export function setup() {
 
 // 상품 조회 테스트
 export default function (data) {
-    const res = http.get("http://localhost:8080/api/v1/goods/search?name=", {
+    const res = http.get("http://localhost:8080/api/v1/goods/search?name=00&page=0&size=20", {
         headers: {
             Authorization: `Bearer ${data.accessToken}`
         },
@@ -58,5 +58,5 @@ export default function (data) {
         // "latency < 300ms": (r) => r.timings.duration < 300,
     });
 
-    sleep(1); // 1초 대기 (실사용자 환경을 흉내냄)
+    // sleep(1); // 1초 대기 (실사용자 환경을 흉내냄)
 }
