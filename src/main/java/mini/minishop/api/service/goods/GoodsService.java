@@ -14,6 +14,8 @@ import mini.minishop.domain.goods.GoodsRepository;
 import mini.minishop.domain.user.User;
 import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.goods.GoodsErrorCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +65,8 @@ public class GoodsService {
     }
 
     @Transactional
-    public List<FindGoodsResponse> searchGoodsByName(String name) {
-        return goodsRepository.findByNameContaining(name);
+    public Page<FindGoodsResponse> searchGoodsByName(String name, int page, int size) {
+        return goodsRepository.findByNameContaining(name, PageRequest.of(page, size));
     }
 
     @Transactional

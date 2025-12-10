@@ -12,6 +12,7 @@ import mini.minishop.api.service.goods.GoodsService;
 import mini.minishop.api.service.goods.response.CreateGoodsResponse;
 import mini.minishop.api.service.goods.response.FindGoodsResponse;
 import mini.minishop.api.service.goods.response.UpdateGoodsResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,9 +57,11 @@ public class GoodsController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<List<FindGoodsResponse>> searchGoodsByName(
-            @RequestParam(name = "name") String name) {
-        List<FindGoodsResponse> response = goodsService.searchGoodsByName(name);
+    public ApiResponse<Page<FindGoodsResponse>> searchGoodsByName(
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        Page<FindGoodsResponse> response = goodsService.searchGoodsByName(name, page, size);
 
         return ApiResponse.ok(response);
     }
