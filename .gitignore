@@ -56,3 +56,6 @@ terraform.tfvars
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+
+### SQL Files ###
+*.sql
