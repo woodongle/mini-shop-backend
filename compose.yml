@@ -6,6 +6,7 @@ services:
       - .env
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./exporter-setup.sql:/docker-entrypoint-initdb.d/exporter-setup.sql:ro
     ports:
       - "3306:3306"
     networks:
@@ -21,6 +22,26 @@ services:
         limits:
           cpus: "2"
           memory: 2GB
+
+  mysql-exporter:
+    image: prom/mysqld-exporter:v0.15.1
+    container_name: mysql-exporter
+    volumes:
+      - ./.my.cnf:/home/.my.cnf
+    command:
+      - "--config.my-cnf=/home/.my.cnf"
+    ports:
+      - "9104:9104"
+    networks:
+      - monitoring
+    depends_on:
+      minishop-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 128MB
 
   app:
     build: .

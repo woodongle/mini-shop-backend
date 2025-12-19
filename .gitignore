@@ -59,3 +59,6 @@ terraform.tfvars
 
 ### SQL Files ###
 *.sql
+
+### MySQL Configuration File ###
+.my.cnf
