@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 import mini.minishop.domain.BaseTimeEntity;
 import mini.minishop.domain.delivery.Delivery;
 import mini.minishop.domain.delivery.DeliveryStatus;
+import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.ordergoods.OrderGoods;
 import mini.minishop.domain.user.User;
 import mini.minishop.exception.BusinessException;
@@ -62,6 +63,18 @@ public class Order extends BaseTimeEntity {
         this.status = status;
         this.user = user;
         this.delivery = delivery;
+    }
+
+    public void addOrderGoods(Goods goods, int quantity) {
+        goods.deductInventoryQuantity(quantity);
+
+        OrderGoods newOrderGoods = OrderGoods.builder()
+                .order(this)
+                .goods(goods)
+                .quantity(quantity)
+                .build();
+
+        this.orderGoods.add(newOrderGoods);
     }
 
     public void cancel() {

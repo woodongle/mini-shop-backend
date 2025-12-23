@@ -42,9 +42,7 @@ public class OrderGoods {
     @Builder
     public OrderGoods(Order order, Goods goods, int quantity) {
         this.order = order;
-        this.order.getOrderGoods().add(this);
         this.goods = goods;
-        this.goods.deductInventoryQuantity(quantity);
         this.quantity = quantity;
         this.paymentAmount = calculatePaymentAmount();
     }

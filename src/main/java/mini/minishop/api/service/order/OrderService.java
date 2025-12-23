@@ -14,7 +14,6 @@ import mini.minishop.domain.goods.Goods;
 import mini.minishop.domain.order.Order;
 import mini.minishop.domain.order.OrderRepository;
 import mini.minishop.domain.order.OrderStatus;
-import mini.minishop.domain.ordergoods.OrderGoods;
 import mini.minishop.domain.user.User;
 import mini.minishop.exception.BusinessException;
 import mini.minishop.exception.order.OrderErrorCode;
@@ -32,27 +31,20 @@ public class OrderService {
 
     @Transactional
     public CreateOrderResponse createOrder(CreateOrderServiceRequest request, String userEmail, Long goodsId) {
+        User currnetUser = userService.findUserByUserEmail(userEmail);
+        Goods findGoods = goodsService.findGoodsEntityByGoodsId(goodsId);
+
         Delivery delivery = Delivery.builder()
                 .status(DeliveryStatus.BEFORE_DELIVERY)
                 .address(request.getAddress())
                 .build();
-
-        User currnetUser = userService.findUserByUserEmail(userEmail);
 
         Order order = Order.builder()
                 .status(OrderStatus.COMPLETED_ORDER)
                 .user(currnetUser)
                 .delivery(delivery)
                 .build();
-
-        Goods findGoods = goodsService.findGoodsEntityByGoodsId(goodsId);
-
-        OrderGoods orderGoods = OrderGoods.builder()
-                .order(order)
-                .goods(findGoods)
-                .quantity(request.getOrderGoodsQuantity())
-                .build();
-
+        order.addOrderGoods(findGoods, request.getOrderGoodsQuantity());
         Order savedOrder = orderRepository.save(order);
 
         return new CreateOrderResponse(savedOrder);
