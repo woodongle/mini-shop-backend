@@ -2,7 +2,7 @@ import http from "k6/http";
 import {check} from "k6";
 
 export const options = {
-    vus: 30,              // 동시에 접속하는 사용자 수
+    vus: 15,              // 동시에 접속하는 사용자 수
     duration: "30s",       // 테스트 실행 시간
     thresholds: {
         // http_req_duration: ["p(95)<400"], // p95 400ms 이하 목표
