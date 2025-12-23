@@ -205,10 +205,12 @@ class OrderServiceTest {
 
         Order order1 = createOrder(user, delivery1);
         Order order2 = createOrder(user, delivery2);
-        orderRepository.saveAll(List.of(order1, order2));
-
         int orderGoods1_quantity = 2;
         int orderGoods2_Quantity = 3;
+        order1.addOrderGoods(goods, 2);
+        order2.addOrderGoods(goods, 3);
+        orderRepository.saveAll(List.of(order1, order2));
+
         OrderGoods orderGoods1 = createOrderGoods(orderGoods1_quantity, order1, goods);
         OrderGoods orderGoods2 = createOrderGoods(orderGoods2_Quantity, order2, goods);
         orderGoodsRepository.saveAll(List.of(orderGoods1, orderGoods2));
