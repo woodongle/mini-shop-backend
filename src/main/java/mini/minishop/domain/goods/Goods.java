@@ -17,12 +17,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import mini.minishop.domain.BaseTimeEntity;
 import mini.minishop.domain.user.User;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AutoCloseable.class)
+@DynamicUpdate
 public class Goods extends BaseTimeEntity {
 
     @Id
