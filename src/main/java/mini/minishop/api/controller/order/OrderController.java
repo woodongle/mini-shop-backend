@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mini.minishop.api.ApiResponse;
 import mini.minishop.api.controller.order.request.CreateOrderRequest;
+import mini.minishop.api.service.order.OrderFacade;
 import mini.minishop.api.service.order.OrderService;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.CreateOrderResponse;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderFacade orderFacade;
 
     @ResponseStatus(CREATED)
     @PostMapping("/{goodsId}")
@@ -36,7 +38,7 @@ public class OrderController {
                                                         @PathVariable Long goodsId) {
 
         String userEmail = userDetails.getUsername();
-        CreateOrderResponse response = orderService.createOrder(request.toServiceRequest(), userEmail, goodsId);
+        CreateOrderResponse response = orderFacade.createOrder(request.toServiceRequest(), userEmail, goodsId);
 
         return ApiResponse.created("상품 주문이 완료되었습니다.", response);
     }
