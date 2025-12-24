@@ -58,6 +58,9 @@ class OrderServiceTest {
     private OrderService orderService;
 
     @Autowired
+    private OrderFacade orderFacade;
+
+    @Autowired
     private EntityManager em;
 
     @AfterEach
@@ -95,7 +98,7 @@ class OrderServiceTest {
         em.clear();
 
         // when
-        CreateOrderResponse response = orderService.createOrder(request, user.getEmail(), goods.getId());
+        CreateOrderResponse response = orderFacade.createOrder(request, user.getEmail(), goods.getId());
 
         // then
         assertThat(response.getOrderGoods().getFirst())
@@ -119,7 +122,7 @@ class OrderServiceTest {
                 .build();
 
         // when // then
-        assertThatThrownBy(() -> orderService.createOrder(request, user.getEmail(), 0L))
+        assertThatThrownBy(() -> orderFacade.createOrder(request, user.getEmail(), 0L))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("존재하지 않는 상품입니다.");
     }

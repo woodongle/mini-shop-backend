@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import mini.minishop.api.controller.order.OrderController;
 import mini.minishop.api.controller.order.request.CreateOrderRequest;
+import mini.minishop.api.service.order.OrderFacade;
 import mini.minishop.api.service.order.OrderService;
 import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
@@ -60,6 +61,9 @@ public class OrderControllerDocsTest extends RestDocsSupport {
     private OrderService orderService;
 
     @MockitoBean
+    private OrderFacade orderFacade;
+
+    @MockitoBean
     private UserService userService;
 
     @DisplayName("상품을 주문하는 API")
@@ -89,7 +93,7 @@ public class OrderControllerDocsTest extends RestDocsSupport {
 
         Long mockGoodsId = 1L;
 
-        given(orderService.createOrder(any(CreateOrderServiceRequest.class), anyString(), eq(mockGoodsId)))
+        given(orderFacade.createOrder(any(CreateOrderServiceRequest.class), anyString(), eq(mockGoodsId)))
                 .willReturn(response);
 
         mockMvc.perform(post("/api/v1/order/{goodsId}", mockGoodsId)
