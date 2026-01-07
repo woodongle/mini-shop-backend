@@ -11,24 +11,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import mini.minishop.api.controller.HomeController;
-import mini.minishop.config.JpaAuditingConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.security.test.context.support.WithMockUser;
 
-@WebMvcTest(
-        value = HomeController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(
-                        type = FilterType.ASSIGNABLE_TYPE,
-                        classes = JpaAuditingConfig.class
-                )
-        })
-public class HomeControllerDocsTest extends RestDocsSupport {
+public class HomeControllerDocsTest extends MockIntegrationTestSupport {
 
     @DisplayName("메인 페이지 API")
     @WithMockUser(username = "user@user.com", roles = "USER")

@@ -26,45 +26,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import mini.minishop.api.controller.order.OrderController;
 import mini.minishop.api.controller.order.request.CreateOrderRequest;
-import mini.minishop.api.service.order.OrderFacade;
-import mini.minishop.api.service.order.OrderService;
 import mini.minishop.api.service.order.request.CreateOrderServiceRequest;
 import mini.minishop.api.service.order.response.CancelOrderResponse;
 import mini.minishop.api.service.order.response.CreateOrderResponse;
 import mini.minishop.api.service.order.response.FindOrderHistoryResponse;
 import mini.minishop.api.service.order.response.OrderGoodsResponse;
-import mini.minishop.api.service.user.UserService;
-import mini.minishop.config.JpaAuditingConfig;
 import mini.minishop.domain.order.OrderStatus;
-import mini.minishop.spring.docs.RestDocsSupport;
+import mini.minishop.spring.docs.MockIntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-@WebMvcTest(
-        value = OrderController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(
-                        type = FilterType.ASSIGNABLE_TYPE,
-                        classes = JpaAuditingConfig.class
-                )
-        })
-public class OrderControllerDocsTest extends RestDocsSupport {
-
-    @MockitoBean
-    private OrderService orderService;
-
-    @MockitoBean
-    private OrderFacade orderFacade;
-
-    @MockitoBean
-    private UserService userService;
+public class OrderControllerDocsTest extends MockIntegrationTestSupport {
 
     @DisplayName("상품을 주문하는 API")
     @WithMockUser(username = "user@user.com", roles = "USER")

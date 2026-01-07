@@ -22,58 +22,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import mini.minishop.api.controller.user.UserController;
 import mini.minishop.api.controller.user.request.CreateUserRequest;
 import mini.minishop.api.controller.user.request.LoginRequest;
 import mini.minishop.api.controller.user.request.TokenRefreshRequest;
-import mini.minishop.api.service.auth.AuthService;
-import mini.minishop.api.service.auth.RefreshTokenService;
 import mini.minishop.api.service.auth.request.LoginServiceRequest;
 import mini.minishop.api.service.auth.response.TokenResponse;
-import mini.minishop.api.service.user.UserService;
 import mini.minishop.api.service.user.response.FindUserResponse;
-import mini.minishop.config.JpaAuditingConfig;
-import mini.minishop.config.JwtTokenProvider;
 import mini.minishop.domain.user.User;
 import mini.minishop.domain.user.UserRole;
-import mini.minishop.spring.docs.RestDocsSupport;
+import mini.minishop.spring.docs.MockIntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-@WebMvcTest(
-        value = UserController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(
-                        type = FilterType.ASSIGNABLE_TYPE,
-                        classes = JpaAuditingConfig.class
-                )
-        })
-public class UserControllerDocsTest extends RestDocsSupport {
-
-    @MockitoBean
-    private UserService userService;
-
-    @MockitoBean
-    private AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    @MockitoBean
-    private AuthenticationManager authenticationManager;
-
-    @MockitoBean
-    private JwtTokenProvider jwtTokenProvider;
-
-    @MockitoBean
-    private RefreshTokenService refreshTokenService;
-
-    @MockitoBean
-    private AuthService authService;
+public class UserControllerDocsTest extends MockIntegrationTestSupport {
 
     @DisplayName("회원을 등록하는 API")
     @WithMockUser(username = "user@user.com", roles = "USER")
