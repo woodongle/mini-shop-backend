@@ -38,7 +38,7 @@ Mini Shop은 C2C 방식으로 사용자가 상품을 등록하고 주문할 수 
   - JWT Authentication
 - **Database**
   - H2 Database(개발 환경)
-  - MySQL (AWS RDS - 운영 환경)
+  - MySQL (AWS RDS - 운영 환경, 부하 테스트)
 - **Infra & DevOps**
   - AWS
   - Docker
